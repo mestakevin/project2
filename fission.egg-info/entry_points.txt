@@ -1,0 +1,2 @@
+[console_scripts]
+example_script = fission:main_program
