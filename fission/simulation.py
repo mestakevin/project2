@@ -1,7 +1,7 @@
 #main simulation module
 
 import numpy as np
-from .particle import Particle
+from particle import Particle
 
 def run_Simulation():
     time = 0
@@ -11,6 +11,8 @@ def run_Simulation():
     dt = 0.01
     test_particle = Particle(pos,vel)
     
+    print(test_particle.getPos())
+    print(test_particle.getEng())
     while time < 10:
         test_particle.move(drag_coeff, dt)
         print(test_particle.getPos())
@@ -18,5 +20,4 @@ def run_Simulation():
         time += dt
 
 run_Simulation()
-
 
