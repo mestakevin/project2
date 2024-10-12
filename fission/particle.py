@@ -1,4 +1,5 @@
 #module for particles in simulation
+import math
 import numpy as np
 
 class Particle:
@@ -6,15 +7,24 @@ class Particle:
             self.pos = pos
             self.vel = vel 
             self.mass = 1
+            self.radius = 0
             self.eng = self.getEng()
 
         def move(self, drag_coeff, dt):
-            drag_force = 0.5 * drag_coeff * self.vel ** 2
+            drag_force = 0.5 * drag_coeff * np.square(self.vel)
+          
             accel = drag_force / self.mass
+           
+
             new_vel = self.vel - accel * dt
+           
+    
             self.updVel(new_vel)
             self.updEng(self.getEng())
-            self.pos += self.vel * dt
+
+            new_pos = self.pos + new_vel * dt
+           
+            self.pos = new_pos
            
 
         def getEng(self):
@@ -27,28 +37,65 @@ class Particle:
             return self.vel
 
         def getSpeed(self):
-            return np.sqrt(self.vel.dot(self.vel))
+            return np.linalg.norm(self.getVel())
 
         def updVel(self, new_vel):
             self.vel = new_vel
 
         def getPos(self):
             return self.pos
+        
+        def getRadius(self):
+            return self.radius
 
-        def collide(self,other_particle):
+        def distanceFrom(self,other_particle):
+            pos1 = self.getPos()
+            
+            x1,y1,z1= pos1[0], pos1[1], pos1[2]
+            pos2 = other_particle.getPos()
+            x2,y2,z2= pos2[0], pos2[1], pos2[2]
+            dist = math.sqrt( (x1-x2)**2 + (y1 -y2)**2 +(z1-z2)**2 )  
+            return dist
+
+
+        def collideParticle(self,other_particle):
+                min_dist = self.getRadius() + other_particle.getRadius() * 1.0e8
+                if self.distanceFrom(other_particle)  < min_dist:
+                    vel_1 = self.getVel()
+                    vel_2 = other_particle.getVel()
+                    self.updVel(vel_2)
+                    other_particle.updVel(vel_1)
+        
+        def collideWall(self,box_dim):
+                cur_vel = self.getVel()
+                if self.getRadius() * self.getPos()[0] > abs(box_dim[0]):
+                    x_vel = -1 * cur_vel[0]
+                else:
+                     x_vel = cur_vel[0]
+                if self.getRadius() * self.getPos()[1] > abs(box_dim[1]):
+                    y_vel = -1 * cur_vel[1]
+                else:
+                    y_vel = cur_vel[1]
+                if self.getRadius() * self.getPos()[2] > abs(box_dim[2]):
+                    z_vel = -1 * cur_vel[2]
+                else:
+                    z_vel = cur_vel[2]
+                new_vel = [x_vel,y_vel,z_vel]
+                self.updVel(new_vel)                
+
 
 
 class Neutron(Particle):
         def __init__(self, pos, vel):
             super().__init__(pos,vel)
-            self.mass = 1.674927e-27 #kilograms
+            self.mass = 1 #kilograms
             self.radius = 8.0e-16 #meters
 
 
 class Uranium(Particle):
         def __init__(self, pos, vel):
             super().__init__(pos,vel)
-            self.mass = 3.9029e-25 #kilograms
+            self.mass = 235 #kilograms
             self.radius = 2.4e-10 #meters
 
 
