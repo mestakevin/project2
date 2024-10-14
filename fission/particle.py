@@ -97,25 +97,35 @@ class Particle:
         new_vel = [new_vel_x, new_vel_y, new_vel_z]
         self.updVel(new_vel)
 
-        
-    # Method for elastic collision (momentum conservation and scattering)
+     # Method for elastic collision (momentum conservation and scattering)    
     def elasticCollision(self, other_particle):
-        vel_1 = self.getVel()
-        vel_2 = other_particle.getVel()
+        # Convert positions to NumPy arrays to perform vector operations
+        pos_1 = np.array(self.pos)
+        pos_2 = np.array(other_particle.pos)
+
+        vel_1 = np.array(self.vel)
+        vel_2 = np.array(other_particle.vel)
+
         mass_1 = self.mass
         mass_2 = other_particle.mass
 
-        # Calculate the new velocities after elastic collision
-        new_vel_1 = vel_1 - ((2 * mass_2 / (mass_1 + mass_2)) * (np.dot(vel_1 - vel_2, self.pos - other_particle.pos) / np.linalg.norm(self.pos - other_particle.pos) ** 2) * (self.pos - other_particle.pos))
-        new_vel_2 = vel_2 - ((2 * mass_1 / (mass_1 + mass_2)) * (np.dot(vel_2 - vel_1, other_particle.pos - self.pos) / np.linalg.norm(other_particle.pos - self.pos) ** 2) * (other_particle.pos - self.pos))
+        # Compute new velocities after elastic collision
+        if np.linalg.norm(pos_1 - pos_2) != 0:  # Avoid division by zero
+            new_vel_1 = vel_1 - ((2 * mass_2 / (mass_1 + mass_2)) * (np.dot(vel_1 - vel_2, pos_1 - pos_2) / np.linalg.norm(pos_1 - pos_2) ** 2) * (pos_1 - pos_2))
+            new_vel_2 = vel_2 - ((2 * mass_1 / (mass_1 + mass_2)) * (np.dot(vel_2 - vel_1, pos_2 - pos_1) / np.linalg.norm(pos_2 - pos_1) ** 2) * (pos_2 - pos_1))
 
-        # Update velocities
-        self.updVel(new_vel_1)
-        other_particle.updVel(new_vel_2)
+            # Update the velocities
+            self.updVel(new_vel_1.tolist()) 
+            other_particle.updVel(new_vel_2.tolist())
+        else:
+            # Swap velocities
+            self.updVel(vel_2)
+            other_particle.updVel(vel_1)
 
-        # Scatter randomly to add some randomness
-        self.scatterRandomly()
-        other_particle.scatterRandomly()
+            # Scatter in random directions (apply random rotation to velocity vectors)
+            self.scatterRandomly()
+            other_particle.scatterRandomly()
+
                 
     def collideWall(self, box_dim):
         # Check if the particle collides with the walls and scatter randomly upon collision.
