@@ -73,12 +73,13 @@ class Particle:
             # Case 2: Neutron and Uranium collision (fission event)
             elif (self.__class__.__name__ == 'Neutron' and other_particle.__class__.__name__ == 'Uranium') or (self.__class__.__name__ == 'Uranium' and other_particle.__class__.__name__ == 'Neutron'):
                  # All the generated particles' velocity are relative to the neutron particle before fission reaction.
-                if self.__class__.__name__ == 'Neutron':
+                if self.__class__.__name__ == 'Uranium':
                     fission_products = fissionReaction(self.pos, Barium, Krypton, Neutron)
                 else:
                     fission_products = fissionReaction(other_particle.pos, Barium, Krypton, Neutron)
                 # For now, just print the new particles for demonstration purposes
                 print("Fission products:", fission_products)
+                return fission_products
             # Case 3: Elastic collision with scattering for other types
             else:
                 self.elasticCollision(other_particle)
@@ -125,8 +126,7 @@ class Particle:
             # Scatter in random directions (apply random rotation to velocity vectors)
             self.scatterRandomly()
             other_particle.scatterRandomly()
-
-                
+     
     def collideWall(self, box_dim):
         # Check if the particle collides with the walls and scatter randomly upon collision.
         # Ensure the particle stays within the box.
