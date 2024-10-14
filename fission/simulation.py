@@ -1,108 +1,130 @@
-#main simulation module
-
 import numpy as np
-from particle import Neutron,Uranium,Barium, Krypton
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from mpl_toolkits.mplot3d import Axes3D
+from particle import Neutron, Uranium, Barium, Krypton
 
-def initializeSim():
-    nuetron_num = 1
-    uranium_num = 1
-    nuetron_list = []
-    uranium_list = []
-    box_dim = [1,1,1]
-    pos_1 = np.array([0.25,0.0,0.0])
-    vel_1 = np.array([1.0,0.0,0.0])
-    
-    pos_2 = np.array([0.75,0.0,0.0])
-    vel_2 = np.array([-1.0,0.0,0.0])
+# Function to generate initial particles
+def generate_particles(num_neutrons, num_uranium, box_dim):
+    particles = []
 
-    
-    for i in range(nuetron_num):
-        nuetron_list.append(Neutron(pos_1, vel_1) )
+    # Generate neutrons with high random velocities
+    for i in range(num_neutrons):
+        pos = np.random.uniform(-box_dim, box_dim, 3).tolist()
+        vel = np.random.uniform(-100, 100, 3).tolist()  # Neutrons move faster
+        particles.append(Neutron(pos, vel))
 
-    for i in range(uranium_num):
-        uranium_list.append(Uranium(pos_2, vel_2) )
+    # Generate uranium with lower random velocities
+    for j in range(num_uranium):
+        pos = np.random.uniform(-box_dim/2, box_dim/2, 3).tolist()
+        vel = np.random.uniform(-10, 10, 3).tolist()  # Uranium moves slower
+        particles.append(Uranium(pos, vel))
+    print("func_gen", particles)
+    return particles
 
+# Function to run the simulation
+def run_simulation(num_neutrons, num_uranium, box_dim, dt):
+    # Generate initial particles
+    particles = generate_particles(num_neutrons, num_uranium, box_dim)
+    all_positions = []
 
-    return nuetron_list, uranium_list, box_dim
+    while num_uranium > 0:
 
-def run_Simulation():
-        nuetron_list, uranium_list, box_dim = initializeSim()
-        dt = 1.0e-3
-        drag_coeff = 1
-        time_limit = 1.0e0
-        nuetron_pos_list = []
-        uranium_pos_list = []
-        time = 0
+        particle_positions = []
+        # Move and check particle interactions
+        for particle in particles:
+            particle.move(drag_coeff=0.47, dt=dt)
+            particle.collideWall([box_dim, box_dim, box_dim])  # Wall collision
+            particle_positions.append(particle.getPos())  # Collect current position 
 
-        while time < time_limit:
-            #for i in range(len(nuetron_list)):
-            #   this_neutron is equals nuetron_list[i]
-            
-            for i,this_nuetron in enumerate(nuetron_list):
-                this_nuetron.move(drag_coeff, dt)
-                nuetron_pos_list.append(this_nuetron.getPos())    
-                
-                for i,other_particle in enumerate(uranium_list):
-                    this_nuetron.collideParticle(other_particle)
-                this_nuetron.collideWall(box_dim)
-                
+        # Check for particle collisions and fission
+        for particle in particles:
+            for other_particle in particles:
+                particle_name = particle.__class__.__name__
+                other_particle_name = other_particle.__class__.__name__
 
-            for i,this_uranium in enumerate(uranium_list):
-                this_uranium.move(drag_coeff, dt)
-                uranium_pos_list.append(this_uranium.getPos())
-                for i,other_particle in enumerate(nuetron_list):
-                    this_uranium.collideParticle(other_particle)
-                this_uranium.collideWall(box_dim)
-            time += dt
-    return nuetron_pos_list, uranium_pos_list
+                # Check if fission occurred
+                if (particle_name == 'Neutron' and other_particle_name == 'Uranium') or (particle_name == 'Uranium' and other_particle_name == 'Neutron'):
+                    fission_products = particle.collideParticle(other_particle)
+                    if fission_products is not None:
+                        # Update particle list to include new particles
+                        particles.extend(fission_products)
+                        particles.remove(particle)
+                        particles.remove(other_particle)
+                        num_uranium -= 1
+                        break
+                else:
+                    particle.collideParticle(other_particle)
+                    particle_positions.append(particle.getPos())
 
-def animate_simulation():
-    # Get the positions from the simulation
-    nuetron_pos_list, uranium_pos_list = run_Simulation()
-    
-    # Extract positions over time
-    nuetron_pos = np.array(nuetron_pos_list)
-    uranium_pos = np.array(uranium_pos_list)
+        # Save particle positions for this step
+        all_positions.append(particle_positions)
 
-    # Set up the figure and 3D axis
+    return particles, all_positions  
+
+def animate_simulation(particles, all_positions, box_dim):
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-    ax.set_xlim(-1, 1)
-    ax.set_ylim(-1, 1)
-    ax.set_zlim(-1, 1)
-    
-    # Initialize particles as scatter plots
-    particle1, = ax.plot([], [], [], 'ro', label='Neutron')  # red dot for neutron
-    particle2, = ax.plot([], [], [], 'bo', label='Uranium')  # blue dot for uranium
+    ax.set_xlim([-box_dim, box_dim])
+    ax.set_ylim([-box_dim, box_dim])
+    ax.set_zlim([-box_dim, box_dim])
 
-    # Function to initialize the animation
-    def init():
-        particle1.set_data([], [])
-        particle1.set_3d_properties([])
-        particle2.set_data([], [])
-        particle2.set_3d_properties([])
-        return particle1, particle2
+    # Define colors for different particle types
+    colors = {
+        'Neutron': 'blue',
+        'Uranium': 'red',
+        'Barium': 'green',
+        'Krypton': 'orange'
+    }
 
-    # Function to update the positions of the particles for each frame
+    # Initialize scatter plot (empty at first)
+    scat = ax.scatter([], [], [], s=20)
+
+    # Initialize a text box to display particle counts
+    text = ax.text2D(0.05, 0.95, '', transform=ax.transAxes)
+
     def update(frame):
-        # Use lists/arrays with set_data and set_3d_properties
-        particle1.set_data([nuetron_pos[frame][0]], [nuetron_pos[frame][1]])
-        particle1.set_3d_properties([nuetron_pos[frame][2]])
-        particle2.set_data([uranium_pos[frame][0]], [uranium_pos[frame][1]])
-        particle2.set_3d_properties([uranium_pos[frame][2]])
-        return particle1, particle2
+        # Get the positions and states of particles at the current frame
+        positions = all_positions[frame]
+        xs, ys, zs, cs = [], [], [], []
 
-    # Create the animation
-    ani = FuncAnimation(fig, update, frames=len(nuetron_pos), init_func=init, blit=True, interval=50)
+        # For each particle in the current step, update positions and colors
+        for particle, pos in zip(particles, positions):
+            xs.append(pos[0])
+            ys.append(pos[1])
+            zs.append(pos[2])
+            cs.append(colors[particle.__class__.__name__])
 
-    # Display the animation
-    plt.legend()
+        # Update the scatter plot with new data
+        scat._offsets3d = (xs, ys, zs)
+        scat.set_color(cs)
+
+        # Count particles of each type for the current frame
+        neutron_count = sum(1 for p in particles if isinstance(p, Neutron))
+        uranium_count = sum(1 for p in particles if isinstance(p, Uranium))
+        barium_count = sum(1 for p in particles if isinstance(p, Barium))
+        krypton_count = sum(1 for p in particles if isinstance(p, Krypton))
+
+        # Update the text box with particle counts
+        text.set_text(f'Neutrons: {neutron_count}\nUranium: {uranium_count}\nBarium: {barium_count}\nKrypton: {krypton_count}')
+        
+        return scat, text
+
+    # Create the animation, animating each frame from the simulation
+    anim = FuncAnimation(fig, update, frames=len(all_positions), interval=200, blit=False)
+
     plt.show()
-    #ani.save('particle_simulation.gif', writer='imagemagick', fps=30)
 
-# Run the animation
-animate_simulation()
+    # save the animation
+    #anim.save('particle_simulation.gif', writer='imagemagick', fps=30)
 
+# Run and visualize the simulation
+if __name__ == "__main__":
+    num_neutrons = 4
+    num_uranium = 1
+    box_dim = 1 
+    dt = 1e-3
+
+    particles, all_positions = run_simulation(num_neutrons, num_uranium, box_dim, dt)
+    print(particles)
+    animate_simulation(particles, all_positions, box_dim)
