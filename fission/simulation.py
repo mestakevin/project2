@@ -28,6 +28,27 @@ def run_simulation(num_neutrons, num_uranium, box_dim, dt):
     particles = generate_particles(num_neutrons, num_uranium, box_dim)
     all_positions = []
 
+    # counting the number of each partcile in particles list
+    count_neutron = int(0)
+    count_uranium = int(0)
+    count_barium = int(0)
+    count_krypton = int(0)
+    for particle in particles:
+        name = particle.__class__.__name__
+        if name == 'Neutron':
+            count_neutron += int(1)
+        elif name == 'Uranium':
+            count_uranium += int(1)
+        elif name == 'Barium':
+            count_barium += int(1)
+        elif name == 'krypton':
+            count_krypton += int(1)
+    print("Particles count before fission reaction")
+    print("Neutron: ", count_neutron)
+    print("Uranium: ", count_uranium)
+    print("Barium: ", count_barium)
+    print("Krypton: ", count_krypton)
+    print()
     while num_uranium > 0:
 
         particle_positions = []
@@ -122,9 +143,30 @@ def animate_simulation(particles, all_positions, box_dim):
 if __name__ == "__main__":
     num_neutrons = 4
     num_uranium = 1
-    box_dim = 1 
+    box_dim = 1     # Must be in meter unit
     dt = 1e-3
 
     particles, all_positions = run_simulation(num_neutrons, num_uranium, box_dim, dt)
     print(particles)
-    animate_simulation(particles, all_positions, box_dim)
+            
+    # counting the number of each partcile in particles list after finishing the fission reaction
+    count_neutron = int(0)
+    count_uranium = int(0)
+    count_barium = int(0)
+    count_krypton = int(0)
+    for particle in particles:
+        name = particle.__class__.__name__
+        if name == 'Neutron':
+            count_neutron += int(1)
+        elif name == 'Uranium':
+            count_uranium += int(1)
+        elif name == 'Barium':
+            count_barium += int(1)
+        elif name == 'Krypton':
+            count_krypton += int(1)
+    print("Particles count after fission reaction")
+    print("Neutron: ", count_neutron)
+    print("Uranium: ", count_uranium)
+    print("Barium: ", count_barium)
+    print("Krypton: ", count_krypton)
+    #animate_simulation(particles, all_positions, box_dim)
