@@ -2,6 +2,7 @@
 import math
 import numpy as np
 import random
+from reaction import fissionReaction
 
 class Particle:
     def __init__(self, pos, vel):
@@ -71,8 +72,13 @@ class Particle:
 
             # Case 2: Neutron and Uranium collision (fission event)
             elif (self.__class__.__name__ == 'Neutron' and other_particle.__class__.__name__ == 'Uranium') or (self.__class__.__name__ == 'Uranium' and other_particle.__class__.__name__ == 'Neutron'):
-                self.fissionReaction()
-
+                 # All the generated particles' velocity are relative to the neutron particle before fission reaction.
+                if self.__class__.__name__ == 'Neutron':
+                    fission_products = fissionReaction(self.pos, Barium, Krypton, Neutron)
+                else:
+                    fission_products = fissionReaction(other_particle.pos, Barium, Krypton, Neutron)
+                # For now, just print the new particles for demonstration purposes
+                print("Fission products:", fission_products)
             # Case 3: Elastic collision with scattering for other types
             else:
                 self.elasticCollision(other_particle)
@@ -90,7 +96,27 @@ class Particle:
         
         new_vel = [new_vel_x, new_vel_y, new_vel_z]
         self.updVel(new_vel)
-            
+
+        
+    # Method for elastic collision (momentum conservation and scattering)
+    def elasticCollision(self, other_particle):
+        vel_1 = self.getVel()
+        vel_2 = other_particle.getVel()
+        mass_1 = self.mass
+        mass_2 = other_particle.mass
+
+        # Calculate the new velocities after elastic collision
+        new_vel_1 = vel_1 - ((2 * mass_2 / (mass_1 + mass_2)) * (np.dot(vel_1 - vel_2, self.pos - other_particle.pos) / np.linalg.norm(self.pos - other_particle.pos) ** 2) * (self.pos - other_particle.pos))
+        new_vel_2 = vel_2 - ((2 * mass_1 / (mass_1 + mass_2)) * (np.dot(vel_2 - vel_1, other_particle.pos - self.pos) / np.linalg.norm(other_particle.pos - self.pos) ** 2) * (other_particle.pos - self.pos))
+
+        # Update velocities
+        self.updVel(new_vel_1)
+        other_particle.updVel(new_vel_2)
+
+        # Scatter randomly to add some randomness
+        self.scatterRandomly()
+        other_particle.scatterRandomly()
+                
     def collideWall(self, box_dim):
         # Check if the particle collides with the walls and scatter randomly upon collision.
         # Ensure the particle stays within the box.
@@ -117,32 +143,28 @@ class Particle:
 
         # Update the particle's velocity and position
         self.updVel(vel)
-        self.getPos(pos)
-
+        self.pos = pos
 
 class Neutron(Particle):
-        def __init__(self, pos, vel):
-            super().__init__(pos,vel)
-            self.mass = 1 #kilograms
-            self.radius = 8.0e-16 #meters
-
+    def __init__(self, pos, vel):
+        super().__init__(pos,vel)
+        self.mass = 1 #kilograms
+        self.radius = 8.0e-16 #meters
 
 class Uranium(Particle):
-        def __init__(self, pos, vel):
-            super().__init__(pos,vel)
-            self.mass = 235 #kilograms
-            self.radius = 2.4e-10 #meters
-
+    def __init__(self, pos, vel):
+        super().__init__(pos,vel)
+        self.mass = 235 #kilograms
+        self.radius = 2.4e-10 #meters
 
 class Barium(Particle):
-        def __init__(self, pos, vel):
-            super().__init__(pos,vel)
-            self.mass = 2.3396e-25 #kilograms
-            self.radius = 2.68e-10 #meters
-
+    def __init__(self, pos, vel):
+        super().__init__(pos,vel)
+        self.mass = 2.3396e-25 #kilograms
+        self.radius = 2.68e-10 #meters
 
 class Krypton(Particle):
-        def __init__(self, pos, vel):
-            super().__init__(pos,vel)
-            self.mass = 1.52579e-27 #kilograms
-            self.radius = 2.02e-10 #meters
+    def __init__(self, pos, vel):
+        super().__init__(pos,vel)
+        self.mass = 1.52579e-27 #kilograms
+        self.radius = 2.02e-10 #meters
