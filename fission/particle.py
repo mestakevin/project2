@@ -91,23 +91,33 @@ class Particle:
         new_vel = [new_vel_x, new_vel_y, new_vel_z]
         self.updVel(new_vel)
             
-        def collideWall(self,box_dim):
-                cur_vel = self.getVel()
-                if self.getRadius() * self.getPos()[0] > abs(box_dim[0]):
-                    x_vel = -1 * cur_vel[0]
-                else:
-                     x_vel = cur_vel[0]
-                if self.getRadius() * self.getPos()[1] > abs(box_dim[1]):
-                    y_vel = -1 * cur_vel[1]
-                else:
-                    y_vel = cur_vel[1]
-                if self.getRadius() * self.getPos()[2] > abs(box_dim[2]):
-                    z_vel = -1 * cur_vel[2]
-                else:
-                    z_vel = cur_vel[2]
-                new_vel = [x_vel,y_vel,z_vel]
-                self.updVel(new_vel)                
+    def collideWall(self, box_dim):
+        # Check if the particle collides with the walls and scatter randomly upon collision.
+        # Ensure the particle stays within the box.
+        pos = self.getPos()
+        vel = self.getVel()
 
+        # Scattering upon hitting the x-wall
+        if abs(pos[0]) + self.getRadius() >= box_dim[0]:
+            vel[0] = -vel[0]  # Reflect the velocity along x-axis
+            self.scatterRandomly()  # Scatter in a random direction
+            pos[0] = np.sign(pos[0]) * (box_dim[0] - self.getRadius())  # Correct position
+
+        # Scattering upon hitting the y-wall
+        if abs(pos[1]) + self.getRadius() >= box_dim[1]:
+            vel[1] = -vel[1]  # Reflect the velocity along y-axis
+            self.scatterRandomly()  # Scatter in a random direction
+            pos[1] = np.sign(pos[1]) * (box_dim[1] - self.getRadius())  # Correct position
+
+        # Scattering upon hitting the z-wall
+        if abs(pos[2]) + self.getRadius() >= box_dim[2]:
+            vel[2] = -vel[2]  # Reflect the velocity along z-axis
+            self.scatterRandomly()  # Scatter in a random direction
+            pos[2] = np.sign(pos[2]) * (box_dim[2] - self.getRadius())  # Correct position
+
+        # Update the particle's velocity and position
+        self.updVel(vel)
+        self.getPos(pos)
 
 
 class Neutron(Particle):
