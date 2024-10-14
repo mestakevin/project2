@@ -58,13 +58,31 @@ class Particle:
             return dist
 
 
-        def collideParticle(self,other_particle):
-                min_dist = self.getRadius() + other_particle.getRadius() * 1.0e8
-                if self.distanceFrom(other_particle)  < min_dist:
+        def collideParticle(self, other_particle):
+            min_dist = self.getRadius() + other_particle.getRadius() * 1.0e8
+            if self.distanceFrom(other_particle)  <= min_dist:
+                # Class names 
+                
+                # Case 1: Both particles are of the same type (swap velocities and scatter)
+                if self.__class__.__name__ == other_particle.__class__.__name__:
                     vel_1 = self.getVel()
                     vel_2 = other_particle.getVel()
+
+                    # Swap velocities
                     self.updVel(vel_2)
                     other_particle.updVel(vel_1)
+
+                    # Scatter in random directions (apply random rotation to velocity vectors)
+                    self.scatterRandomly()
+                    other_particle.scatterRandomly()
+
+                # Case 2: Neutron and Uranium collision (fission event)
+                elif (self.__class__.__name__ == 'Neutron' and other_particle.__class__.__name__ == 'Uranium') or (self.__class__.__name__ == 'Uranium' and other_particle.__class__.__name__ == 'Neutron'):
+                    self.fissionReaction()
+
+                # Case 3: Elastic collision with scattering for other types
+                else:
+                    self.elasticCollision(other_particle)
         
         def collideWall(self,box_dim):
                 cur_vel = self.getVel()
