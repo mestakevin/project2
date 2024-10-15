@@ -78,7 +78,7 @@ class Particle:
                 else:
                     fission_products = fissionReaction(other_particle.pos, Barium, Krypton, Neutron)
                 # For now, just print the new particles for demonstration purposes
-                print("Fission products:", fission_products)
+                #print("Fission products:", fission_products)
                 return fission_products
             # Case 3: Elastic collision with scattering for other types
             else:
@@ -111,7 +111,7 @@ class Particle:
         mass_2 = other_particle.mass
 
         # Compute new velocities after elastic collision
-        if np.linalg.norm(pos_1 - pos_2) != 0:  # Avoid division by zero
+        if np.linalg.norm(pos_1 - pos_2) >= 1e-6:  # Avoid division by zero or extremely small value
             new_vel_1 = vel_1 - ((2 * mass_2 / (mass_1 + mass_2)) * (np.dot(vel_1 - vel_2, pos_1 - pos_2) / np.linalg.norm(pos_1 - pos_2) ** 2) * (pos_1 - pos_2))
             new_vel_2 = vel_2 - ((2 * mass_1 / (mass_1 + mass_2)) * (np.dot(vel_2 - vel_1, pos_2 - pos_1) / np.linalg.norm(pos_2 - pos_1) ** 2) * (pos_2 - pos_1))
 
