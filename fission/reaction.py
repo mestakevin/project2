@@ -18,5 +18,22 @@ def fissionReaction(uranium_pos, Barium, Krypton, Neutron):
     # The fission products can be added to the particle list in the main simulation loop
     return [barium, krypton, new_neutron_1, new_neutron_2, new_neutron_3]
 
+def dragEnergy(dt, velocity, radius):
+    # Drag force heat transfer
+    vel = np.linalg.norm(velocity)  
+    if np.isnan(vel):
+        print("Warning: Invalid velocity detected!")
+    cross_sectional_area = np.pi * (radius ** 2)
+    drag_coefficient = 0.47  # assuming spherical particles
+    water_density = 1000  # kg/m^3 for water
 
+    # Drag force calculation (F_drag = 0.5 * Cd * rho * A * v^2)
+    drag_force = 0.5 * drag_coefficient * water_density * cross_sectional_area * (vel ** 2)
+
+    # Work done by drag (W_drag = F_drag * distance traveled)
+    distance_traveled = vel * dt  # approximation for small dt
+    work_done_by_drag = drag_force * distance_traveled  # energy in joules
     
+    # Add the energy dissipated by this particle to the total drag energy
+
+    return work_done_by_drag
