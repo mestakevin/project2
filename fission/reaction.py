@@ -37,3 +37,21 @@ def dragEnergy(dt, velocity, radius):
     # Add the energy dissipated by this particle to the total drag energy
 
     return work_done_by_drag
+
+def heatRelease(num_fission_rxn, box_dim, total_drag_energy):
+    # calculating the volume of water tank and its water capacity
+    box_vol = box_dim**3  # in meter cubed
+    mass_water = 1000 * box_vol  # in kg, water density is equal to 1000 Kg/m^3
+    specific_heat = 4184  # c = 4184 J/kg.c
+
+    # Energy released per fission and total energy
+    fission_energy = 2.97 * 10e-11  # energy in joules per fission reaction
+    total_fission_energy = num_fission_rxn * fission_energy
+
+    # Total energy transferred to the water
+    total_energy_to_water = total_fission_energy + total_drag_energy
+
+    # Temperature change in the water tank due to fission and drag forces
+    temp_change = total_energy_to_water / (mass_water * specific_heat)  # in Celsius
+
+    return temp_change, total_fission_energy
