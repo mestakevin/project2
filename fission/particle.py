@@ -55,8 +55,8 @@ class Particle:
         return dist
 
     def collideParticle(self, other_particle):
-        min_dist = self.getRadius() + other_particle.getRadius() * 1.0e8
-        if self.distanceFrom(other_particle)  <= min_dist:
+        min_dist = (self.getRadius() + other_particle.getRadius()) * 1.0e9
+        if self.distanceFrom(other_particle) <= min_dist:
             # Case 1: Both particles are of the same type (swap velocities and scatter)
             if self.__class__.__name__ == other_particle.__class__.__name__:
                 vel_1 = self.getVel()
@@ -98,7 +98,8 @@ class Particle:
         new_vel = [new_vel_x, new_vel_y, new_vel_z]
         self.updVel(new_vel)
 
-     # Method for elastic collision (momentum conservation and scattering)    
+        
+    # Method for elastic collision (momentum conservation and scattering)
     def elasticCollision(self, other_particle):
         # Convert positions to NumPy arrays to perform vector operations
         pos_1 = np.array(self.pos)
@@ -126,7 +127,7 @@ class Particle:
             # Scatter in random directions (apply random rotation to velocity vectors)
             self.scatterRandomly()
             other_particle.scatterRandomly()
-     
+
     def collideWall(self, box_dim):
         # Check if the particle collides with the walls and scatter randomly upon collision.
         # Ensure the particle stays within the box.
@@ -170,11 +171,11 @@ class Uranium(Particle):
 class Barium(Particle):
     def __init__(self, pos, vel):
         super().__init__(pos,vel)
-        self.mass = 2.3396e-25 #kilograms
+        self.mass = 141   #2.3396e-25 #kilograms
         self.radius = 2.68e-10 #meters
 
 class Krypton(Particle):
     def __init__(self, pos, vel):
         super().__init__(pos,vel)
-        self.mass = 1.52579e-27 #kilograms
+        self.mass = 92    #1.52579e-27 #kilograms
         self.radius = 2.02e-10 #meters
