@@ -80,6 +80,15 @@ def run_simulation(num_neutrons, num_uranium, box_dim, dt):
 
         # Save particle positions for this step
         all_positions.append(particle_positions)
+    # Drag force heat transfer
+    total_drag_energy = 0
+    for particle in particles:
+        vel    = particle.getVel()
+        radius = particle.getRadius()
+        drag_energy = dragEnergy(dt, vel, radius)
+        total_drag_energy += drag_energy
+
+    temp_change, total_fission_energy = heatRelease(num_fission_occur, box_dim, total_drag_energy)
 
     return particles, all_positions  
 
@@ -145,10 +154,13 @@ if __name__ == "__main__":
     num_uranium = 1
     box_dim = 1     # Must be in meter unit
     dt = 1e-3
+    initial_water_temp = 25.0 # in Celcius assumed room temperature
 
     particles, all_positions = run_simulation(num_neutrons, num_uranium, box_dim, dt)
-    print(particles)
-            
+    print("temp change ", temp_change)
+    current_water_temp = temp_change + initial_water_temp   # in Celcius
+    print("current water temperature: ", current_water_temp)
+                      
     # counting the number of each partcile in particles list after finishing the fission reaction
     count_neutron = int(0)
     count_uranium = int(0)
