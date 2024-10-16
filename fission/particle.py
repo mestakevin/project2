@@ -13,7 +13,14 @@ class Particle:
         self.eng = self.getEng()
 
     def move(self, drag_coeff, dt):
-        drag_force = 0.5 * drag_coeff * np.square(self.vel)
+        cross_sectional_area = np.pi * (self.radius ** 2)
+        #drag_coeff = 0.47  # assuming spherical particles
+        water_density = 1000  # kg/m^3 for water
+        # Drag force calculation (F_drag = 0.5 * Cd * rho * A * v^2)
+
+        drag_force = 0.5 * drag_coeff * water_density * cross_sectional_area * np.square(self.vel)
+
+        #drag_force = 0.5 * drag_coeff * np.square(self.vel)
         # Apply drag force to each component of velocity  
         accel = drag_force / self.mass
         

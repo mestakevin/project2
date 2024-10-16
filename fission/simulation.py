@@ -11,7 +11,7 @@ def generate_particles(num_neutrons, num_uranium, box_dim):
 
     # Generate neutrons with high random velocities
     for i in range(num_neutrons):
-        pos = np.random.uniform(-box_dim, box_dim, 3).tolist()
+        pos = np.random.uniform(-box_dim*0.99, box_dim*0.99, 3).tolist()
         vel = np.random.uniform(-100, 100, 3).tolist()  # Neutrons move faster
         particles.append(Neutron(pos, vel))
 
@@ -21,6 +21,10 @@ def generate_particles(num_neutrons, num_uranium, box_dim):
         vel = np.random.uniform(-10, 10, 3).tolist()  # Uranium moves slower
         particles.append(Uranium(pos, vel))
     return particles
+
+def total_mass_particles(num_neutrons,num_uranium,num_barium,num_krypton):
+    total_mass = num_neutrons * 1 + num_uranium * 235 + num_barium * 141 + num_krypton * 92
+    return total_mass
 
 # Function to run the simulation
 def run_simulation(num_neutrons, num_uranium, box_dim, dt):
@@ -48,15 +52,24 @@ def run_simulation(num_neutrons, num_uranium, box_dim, dt):
     print("Uranium: ", count_uranium)
     print("Barium: ", count_barium)
     print("Krypton: ", count_krypton)
+    print("Total mass: ", total_mass_particles(count_neutron,count_uranium,count_barium,count_krypton))
     print()
 
     num_fission_occur = 0
+    total_drag_energy = 0
+
     while num_uranium > 0:
 
         particle_positions = []
         # Move and check particle interactions
         for particle in particles:
             particle.move(drag_coeff=0.47, dt=dt)
+            
+            vel    = particle.getVel()
+            radius = particle.getRadius()
+            drag_energy = dragEnergy(dt, vel, radius)
+            total_drag_energy += drag_energy
+
             particle.collideWall([box_dim, box_dim, box_dim])  # Wall collision
             particle_positions.append(particle.getPos())  # Collect current position 
 
@@ -84,13 +97,12 @@ def run_simulation(num_neutrons, num_uranium, box_dim, dt):
         # Save particle positions for this step
         all_positions.append(particle_positions)
     
-    # Drag force heat transfer
-    total_drag_energy = 0
-    for particle in particles:
-        vel    = particle.getVel()
-        radius = particle.getRadius()
-        drag_energy = dragEnergy(dt, vel, radius)
-        total_drag_energy += drag_energy
+        # Drag force heat transfer
+        #for particle in particles:
+         #   vel    = particle.getVel()
+          #  radius = particle.getRadius()
+           # drag_energy = dragEnergy(dt, vel, radius)
+            #total_drag_energy += drag_energy
 
     temp_change, total_fission_energy = heatRelease(num_fission_occur, box_dim, total_drag_energy)
 
@@ -154,12 +166,13 @@ def animate_simulation(particles, all_positions, box_dim):
 
 # Run and visualize the simulation
 if __name__ == "__main__":
-    num_neutrons = 4
-    num_uranium = 2
-    box_dim = 1     # Must be in meter unit
+    num_neutrons = 1
+    num_uranium = 1000
+    box_dim = 1.0e-2     # Must be in meter unit
     dt = 1e-3
     initial_water_temp = 25.0 # in Celcius assumed room temperature
 
+    print("initial temp ",initial_water_temp )
     particles, all_positions, temp_change = run_simulation(num_neutrons, num_uranium, box_dim, dt)
     print("temp change ", temp_change)
     current_water_temp = temp_change + initial_water_temp   # in Celcius
@@ -185,4 +198,6 @@ if __name__ == "__main__":
     print("Uranium: ", count_uranium)
     print("Barium: ", count_barium)
     print("Krypton: ", count_krypton)
+    print("Total mass: ", total_mass_particles(count_neutron,count_uranium,count_barium,count_krypton))
+
     #animate_simulation(particles, all_positions, box_dim)
