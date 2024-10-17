@@ -40,8 +40,8 @@ def heat_release_heatmap():
     initial_water_temp = 25.0  # Celsius, assumed room temperature
 
     # Range of uranium atoms and box sizes to simulate
-    uranium_range = np.array([1, 50, 100, 300, 700, 1000])
-    box_sizes = np.array([0.001, 0.005, 0.01, 0.02, 0.05, 0.1])  # Box sizes in meters
+    uranium_range = np.array([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25])
+    box_sizes = np.array([0.000001])
 
     # Initialize a 2D array to store temperature changes
     temp_changes = np.zeros((len(box_sizes), len(uranium_range)))
@@ -55,8 +55,7 @@ def heat_release_heatmap():
 
     # Create the heatmap
     plt.figure()
-    plt.imshow(temp_changes, extent=[uranium_range[0], uranium_range[-1], box_sizes[0], box_sizes[-1]], 
-               aspect='auto', origin='lower', cmap='viridis')
+    plt.imshow(temp_changes, aspect='auto', origin='lower', cmap='viridis')
     plt.colorbar(label="Temperature Change ('C)")
 
     # Label the axes
@@ -64,8 +63,12 @@ def heat_release_heatmap():
     plt.ylabel("Box Size (m)")
     plt.title("Heatmap of Temperature Change vs. Uranium Atoms and Box Size")
 
+    # Set custom Y-ticks to show the exact box sizes
+    plt.yticks(ticks=np.arange(len(box_sizes)), labels=[f"{bs:.7f}" for bs in box_sizes])
+
     # Show the plot
     plt.show()
+
 
 def heat_release_vs_simulations():
     # Simulation parameters (common to all runs)
