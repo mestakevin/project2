@@ -108,22 +108,6 @@ def run_simulation(num_neutrons, num_uranium, box_dim, dt):
 
     return particles, all_positions, temp_change
 
-def visualize_particles(particles):
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-    
-    for particle in particles:
-        pos = np.array(particle.pos)
-        if isinstance(particle, Neutron):
-            ax.scatter(pos[0], pos[1], pos[2], c='blue', label='Neutron')
-        elif isinstance(particle, Uranium):
-            ax.scatter(pos[0], pos[1], pos[2], c='red', label='Uranium')
-
-    plt.show()
-
-    # save the animation
-    #anim.save('particle_simulation.gif', writer='imagemagick', fps=30)
-
 # Run and visualize the simulation
 if __name__ == "__main__":
     num_neutrons = 1
@@ -160,7 +144,6 @@ if __name__ == "__main__":
     print("Krypton: ", count_krypton)
     print("Total mass: ", total_mass_particles(count_neutron,count_uranium,count_barium,count_krypton))
 
-    #visualize_particles(particles)
 
 
 
