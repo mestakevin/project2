@@ -11,14 +11,14 @@ def generate_particles(num_neutrons, num_uranium, box_dim):
 
     # Generate neutrons with high random velocities
     for i in range(num_neutrons):
-        pos = np.random.uniform(-box_dim*0.99, box_dim*0.99, 3).tolist()
-        vel = np.random.uniform(-100, 100, 3).tolist()  # Neutrons move faster
+        pos = np.random.exponential(scale=box_dim/5, size=3).tolist()
+        vel = np.random.exponential(scale=50, size=3).tolist()  # Neutrons move faster
         particles.append(Neutron(pos, vel))
 
     # Generate uranium with lower random velocities
     for j in range(num_uranium):
-        pos = np.random.uniform(-box_dim/2, box_dim/2, 3).tolist()
-        vel = np.random.uniform(-10, 10, 3).tolist()  # Uranium moves slower
+        pos = np.random.exponential(scale=box_dim/5, size=3).tolist()
+        vel = np.random.exponential(scale=10, size=3).tolist()  # Uranium moves slower
         particles.append(Uranium(pos, vel))
     return particles
 
@@ -108,56 +108,16 @@ def run_simulation(num_neutrons, num_uranium, box_dim, dt):
 
     return particles, all_positions, temp_change
 
-def animate_simulation(particles, all_positions, box_dim):
+def visualize_particles(particles):
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-    ax.set_xlim([-box_dim, box_dim])
-    ax.set_ylim([-box_dim, box_dim])
-    ax.set_zlim([-box_dim, box_dim])
-
-    # Define colors for different particle types
-    colors = {
-        'Neutron': 'blue',
-        'Uranium': 'red',
-        'Barium': 'green',
-        'Krypton': 'orange'
-    }
-
-    # Initialize scatter plot (empty at first)
-    scat = ax.scatter([], [], [], s=20)
-
-    # Initialize a text box to display particle counts
-    text = ax.text2D(0.05, 0.95, '', transform=ax.transAxes)
-
-    def update(frame):
-        # Get the positions and states of particles at the current frame
-        positions = all_positions[frame]
-        xs, ys, zs, cs = [], [], [], []
-
-        # For each particle in the current step, update positions and colors
-        for particle, pos in zip(particles, positions):
-            xs.append(pos[0])
-            ys.append(pos[1])
-            zs.append(pos[2])
-            cs.append(colors[particle.__class__.__name__])
-
-        # Update the scatter plot with new data
-        scat._offsets3d = (xs, ys, zs)
-        scat.set_color(cs)
-
-        # Count particles of each type for the current frame
-        neutron_count = sum(1 for p in particles if isinstance(p, Neutron))
-        uranium_count = sum(1 for p in particles if isinstance(p, Uranium))
-        barium_count = sum(1 for p in particles if isinstance(p, Barium))
-        krypton_count = sum(1 for p in particles if isinstance(p, Krypton))
-
-        # Update the text box with particle counts
-        text.set_text(f'Neutrons: {neutron_count}\nUranium: {uranium_count}\nBarium: {barium_count}\nKrypton: {krypton_count}')
-        
-        return scat, text
-
-    # Create the animation, animating each frame from the simulation
-    anim = FuncAnimation(fig, update, frames=len(all_positions), interval=200, blit=False)
+    
+    for particle in particles:
+        pos = np.array(particle.pos)
+        if isinstance(particle, Neutron):
+            ax.scatter(pos[0], pos[1], pos[2], c='blue', label='Neutron')
+        elif isinstance(particle, Uranium):
+            ax.scatter(pos[0], pos[1], pos[2], c='red', label='Uranium')
 
     plt.show()
 
@@ -200,7 +160,7 @@ if __name__ == "__main__":
     print("Krypton: ", count_krypton)
     print("Total mass: ", total_mass_particles(count_neutron,count_uranium,count_barium,count_krypton))
 
-    #animate_simulation(particles, all_positions, box_dim)
+    #visualize_particles(particles)
 
 
 
