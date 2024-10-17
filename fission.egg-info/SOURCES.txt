@@ -1,7 +1,9 @@
 README.txt
 pyproject.toml
 fission/__init__.py
+fission/analysis.py
 fission/particle.py
+fission/reaction.py
 fission/simulation.py
 fission/test_module.py
 fission.egg-info/PKG-INFO

@@ -1,7 +1,7 @@
 
 def main_program():
-    from .simulation import run_Simulation
-    run_Simulation()
+    from .simulation import main
+    main()
 
 def heat_vs_uranium():
     from .analysis import heat_release_vs_uranium

@@ -2,7 +2,7 @@
 import math
 import numpy as np
 import random
-from reaction import fissionReaction
+from .reaction import fissionReaction
 
 class Particle:
     def __init__(self, pos, vel):

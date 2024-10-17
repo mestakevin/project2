@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from mpl_toolkits.mplot3d import Axes3D
-from particle import Neutron, Uranium, Barium, Krypton
-from reaction import heatRelease, dragEnergy
+from .particle import Neutron, Uranium, Barium, Krypton
+from .reaction import heatRelease, dragEnergy
 
 # Function to generate initial particles
 def generate_particles(num_neutrons, num_uranium, box_dim):
@@ -109,7 +109,9 @@ def run_simulation(num_neutrons, num_uranium, box_dim, dt):
     return particles, all_positions, temp_change
 
 # Run and visualize the simulation
-if __name__ == "__main__":
+
+def main():
+#if __name__ == "__main__":
     num_neutrons = 1
     num_uranium = 10
     box_dim = 1.0e-2     # Must be in meter unit
