@@ -3,7 +3,8 @@
 name = "fission"
 version = "0.0.1"
 dependencies = [
-   "numpy",
+   "numpy"
+   "scipy",
 ]
 authors = [
   { name="Kevin Mesta", email="kmmesta@syr.edu" },
@@ -19,4 +20,7 @@ classifiers = [
 ]
 
 [project.scripts]
-example_script = "fission:main_program"
+main_script = "fission:main_program"
+heat_uranium = "fission:heat_vs_uranium"
+heatmap = "fission:heatmap"
+heat_sim = "fission:heat_vs_simulations"
