@@ -75,7 +75,7 @@ def heat_release_vs_simulations():
     dt = 1e-3        
     initial_water_temp = 25.0  # Celsius, assumed room temperature
 
-    simulation_range = (100,250,500,1000,2500,5000,7500,10000) 
+    simulation_range = (5,10,15,20,25,50,100,200,400,600,800,1000,2000,3000,4000,5000) 
     average_temp_change = []
     stdev_temp_change = [] 
 

@@ -143,25 +143,55 @@ class Particle:
 
         # Scattering upon hitting the x-wall
         if abs(pos[0]) + self.getRadius() >= box_dim[0]:
-            vel[0] = -vel[0]  # Reflect the velocity along x-axis
-            self.scatterRandomly()  # Scatter in a random direction
+            vel[0] = self.proposedVelocity("x")
+            #vel[0] = -vel[0]  # Reflect the velocity along x-axis
+            #self.scatterRandomly()  # Scatter in a random direction
             pos[0] = np.sign(pos[0]) * (box_dim[0] - self.getRadius())  # Correct position
 
         # Scattering upon hitting the y-wall
         if abs(pos[1]) + self.getRadius() >= box_dim[1]:
-            vel[1] = -vel[1]  # Reflect the velocity along y-axis
-            self.scatterRandomly()  # Scatter in a random direction
+            vel[1] = self.proposedVelocity("y")  # Reflect the velocity along y-axis
+            #self.scatterRandomly()  # Scatter in a random direction
             pos[1] = np.sign(pos[1]) * (box_dim[1] - self.getRadius())  # Correct position
 
         # Scattering upon hitting the z-wall
         if abs(pos[2]) + self.getRadius() >= box_dim[2]:
-            vel[2] = -vel[2]  # Reflect the velocity along z-axis
-            self.scatterRandomly()  # Scatter in a random direction
+            vel[2] = self.proposedVelocity("z")  # Reflect the velocity along z-axis
+            #self.scatterRandomly()  # Scatter in a random direction
             pos[2] = np.sign(pos[2]) * (box_dim[2] - self.getRadius())  # Correct position
 
         # Update the particle's velocity and position
         self.updVel(vel)
         self.pos = pos
+
+
+    def proposedVelocity(self,direction):
+        new_vel = 0
+        speed = self.getSpeed()
+        cur_vel = self.getVel()
+        if direction == "x":
+                while True:
+                    angle1 = random.uniform(0, 2 * np.pi)  # Random angle for scattering
+                    angle2 = random.uniform(0, np.pi)
+                    new_vel = speed * np.sin(angle2) * np.cos(angle1)
+                    if new_vel * cur_vel[0] < 0:
+                        break
+        if direction =="y":
+                while True:
+                    angle1 = random.uniform(0, 2 * np.pi)  # Random angle for scattering
+                    angle2 = random.uniform(0, np.pi)
+                    new_vel = speed * np.sin(angle2) * np.sin(angle1)
+                    if new_vel * cur_vel[1] < 0:
+                        break    
+        if direction == "z":
+                while True:
+                    angle1 = random.uniform(0, 2 * np.pi)  # Random angle for scattering
+                    angle2 = random.uniform(0, np.pi)
+                    new_vel = speed * np.cos(angle2)
+                    if new_vel * cur_vel[2] < 0:
+                        break
+        return new_vel
+
 
 class Neutron(Particle):
     def __init__(self, pos, vel):
