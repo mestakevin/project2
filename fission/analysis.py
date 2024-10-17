@@ -1,4 +1,5 @@
 # Heat release simulation
+import numpy as np
 import matplotlib.pyplot as plt
 from simulation import run_simulation  # Import the function from Simulation.py
 
@@ -66,7 +67,48 @@ def heat_release_heatmap():
     # Show the plot
     plt.show()
 
+def heat_release_vs_simulations():
+    # Simulation parameters (common to all runs)
+    num_neutrons = 4
+    num_uraniums = 2  
+    box_dim = 0.5      # Box dimension in meters
+    dt = 1e-3        
+    initial_water_temp = 25.0  # Celsius, assumed room temperature
+
+    simulation_range = (5,25,100,250,500,1000) 
+    average_temp_change = []
+    stdev_temp_change = [] 
+
+    for simulation in simulation_range:
+        simulation_num = 1
+        sim_temp_change_list = []
+
+        while simulation_num <= simulation:
+            
+            particles, all_positions, temp_change = run_simulation(num_neutrons, num_uraniums, box_dim, dt) 
+            sim_temp_change_list.append(temp_change)
+            simulation_num += 1
+    
+        average_temp_change.append(np.average(sim_temp_change_list))
+        stdev_temp_change.append(np.std(sim_temp_change_list))
+    
+    
+    plt.figure()
+    plt.plot(simulation_range, stdev_temp_change, label="Standard Deviation", color="blue", marker='o')
+    
+    # Label the axes
+    plt.xlabel("Number of Simulations")
+    plt.ylabel("Standard Deviation")
+    plt.title("Standard Deviation vs. Number of Simulations")
+    plt.legend()
+    
+    # Show the plot
+    plt.grid(True)
+    plt.show()
+
+
 # Run and visualize the simulation
 if __name__ == "__main__":
-    heat_release_vs_uranium()
-    heat_release_heatmap()
+    #heat_release_vs_uranium()
+    #heat_release_heatmap()
+    heat_release_vs_simulations()
