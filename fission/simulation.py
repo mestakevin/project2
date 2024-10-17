@@ -167,7 +167,7 @@ def animate_simulation(particles, all_positions, box_dim):
 # Run and visualize the simulation
 if __name__ == "__main__":
     num_neutrons = 1
-    num_uranium = 1000
+    num_uranium = 10
     box_dim = 1.0e-2     # Must be in meter unit
     dt = 1e-3
     initial_water_temp = 25.0 # in Celcius assumed room temperature
@@ -201,3 +201,7 @@ if __name__ == "__main__":
     print("Total mass: ", total_mass_particles(count_neutron,count_uranium,count_barium,count_krypton))
 
     #animate_simulation(particles, all_positions, box_dim)
+
+
+
+
