@@ -1,0 +1,22 @@
+
+[project]
+name = "fission"
+version = "0.0.1"
+dependencies = [
+   "numpy",
+]
+authors = [
+  { name="Kevin Mesta", email="kmmesta@syr.edu" },
+  { name="Sara Talebi", email="stalebi@syr.edu" },
+]
+description = "Nuclear fission reaction package"
+readme = "README.txt"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.scripts]
+example_script = "fission:main_program"
