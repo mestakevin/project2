@@ -1,8 +1,5 @@
 import numpy as np
 import time
-#import matplotlib.pyplot as plt
-#from matplotlib.animation import FuncAnimation
-#from mpl_toolkits.mplot3d import Axes3D
 from .particle import Neutron, Uranium, Barium, Krypton
 from .reaction import heatRelease, dragEnergy
 
@@ -31,9 +28,7 @@ def total_mass_particles(num_neutrons,num_uranium,num_barium,num_krypton):
 def run_simulation(num_neutrons, num_uranium, box_dim, dt):
     # Generate initial particles
     start_time = time.time()
-    print(start_time)
     particles = generate_particles(num_neutrons, num_uranium, box_dim)
-    #all_positions = []
 
     # counting the number of each partcile in particles list
     count_neutron = int(0)
@@ -62,19 +57,16 @@ def run_simulation(num_neutrons, num_uranium, box_dim, dt):
     total_drag_energy = 0
 
     while num_uranium > 0:
-
-        #particle_positions = []
         # Move and check particle interactions
         for particle in particles:
             particle.move(drag_coeff=0.47, dt=dt)
-            
+        
             vel    = particle.getVel()
             radius = particle.getRadius()
             drag_energy = dragEnergy(dt, vel, radius)
             total_drag_energy += drag_energy
 
             particle.collideWall([box_dim, box_dim, box_dim])  # Wall collision
-            #particle_positions.append(particle.getPos())  # Collect current position 
 
         # Check for particle collisions and fission
         for particle in particles:
@@ -95,15 +87,11 @@ def run_simulation(num_neutrons, num_uranium, box_dim, dt):
                         break
                 else:
                     particle.collideParticle(other_particle)
-                    #particle_positions.append(particle.getPos())
 
     end_time = time.time()
-    print(end_time)
     total_time = end_time-start_time
 
-    
     temp_change, total_fission_energy = heatRelease(num_fission_occur, box_dim, total_drag_energy)
-
     return particles,temp_change, total_time
 
 # Run and visualize the simulation
@@ -115,14 +103,11 @@ def num_input(prompt):
             num = num_input("Invalid input, please enter a number: ")
         return num
 
-
-
 def main():
-#if __name__ == "__main__":
     num_neutrons = int(num_input("Please enter how many neutrons to generate within the box\n>"))
     num_uranium = int(num_input("Please enter how many uraniums to generate within the box\n>"))
-    box_dim = 1.0e-2     # Must be in meter unit
-    dt = 1e-3
+    box_dim = num_input("Please enter a value for half the length of the box\n>")     # Must be in meter unit
+    dt = num_input("Please enter the time step for the simulation\n>")
     initial_water_temp = 25.0 # in Celcius assumed room temperature
 
     print("Initial Water Temp:",initial_water_temp )

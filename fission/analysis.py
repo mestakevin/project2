@@ -16,7 +16,7 @@ def heat_release_vs_uranium():
 
     for num_uranium in uranium_range:
         # Run the simulation to get the temperature change
-        particles, all_positions, temp_change = run_simulation(num_neutrons, num_uranium, box_dim, dt) 
+        particles,temp_change,total_time = run_simulation(num_neutrons, num_uranium, box_dim, dt) 
         temp_changes.append(temp_change)
 
     # Plot the heat released as a function of the number of uranium atoms
@@ -50,7 +50,7 @@ def heat_release_heatmap():
     for i, box_dim in enumerate(box_sizes):
         for j, num_uranium in enumerate(uranium_range):
             # Run the simulation to get the temperature change
-            particles, all_positions, temp_change = run_simulation(num_neutrons, num_uranium, box_dim, dt)
+            particles,temp_change,total_time = run_simulation(num_neutrons, num_uranium, box_dim, dt)
             temp_changes[i, j] = temp_change
 
     # Create the heatmap
@@ -70,7 +70,7 @@ def heat_release_heatmap():
     plt.show()
 
 
-def heat_release_vs_simulations():
+def heattime_vs_simulations():
     # Simulation parameters (common to all runs)
     num_neutrons = 4
     num_uraniums = 2  
@@ -78,40 +78,81 @@ def heat_release_vs_simulations():
     dt = 1e-3        
     initial_water_temp = 25.0  # Celsius, assumed room temperature
 
-    simulation_range = (5,10,15,20,25,50,100,200,400,600,800,1000,2000,3000,4000,5000) 
+    simulation_range = (5,10,15,20,25,50,100,200,400,600,800,1000) 
     average_temp_change = []
     stdev_temp_change = [] 
+    average_time = []
+    stdev_avg_time = []
 
     for simulation in simulation_range:
         simulation_num = 1
         sim_temp_change_list = []
+        sim_total_time_list = []
 
         while simulation_num <= simulation:
-            
-            particles, all_positions, temp_change = run_simulation(num_neutrons, num_uraniums, box_dim, dt) 
+            particles, temp_change,total_time = run_simulation(num_neutrons, num_uraniums, box_dim, dt) 
             sim_temp_change_list.append(temp_change)
+            sim_total_time_list.append(total_time)
             simulation_num += 1
     
         average_temp_change.append(np.average(sim_temp_change_list))
         stdev_temp_change.append(np.std(sim_temp_change_list))
+        average_time.append(np.average(sim_total_time_list))
+        stdev_avg_time.append(np.std(sim_total_time_list))
+
     
-    
+    #average temp vs. simulations
     plt.figure()
-    plt.plot(simulation_range, stdev_temp_change, label="Standard Deviation", color="blue", marker='o')
+    plt.plot(simulation_range, average_temp_change, label="Average Temp Change", color="blue", marker='o')
     
     # Label the axes
     plt.xlabel("Number of Simulations")
-    plt.ylabel("Standard Deviation")
-    plt.title("Standard Deviation vs. Number of Simulations")
+    plt.ylabel("Average Temp Change")
+    plt.title("Average Temp Change vs. Number of Simulations")
     plt.legend()
     
     # Show the plot
     plt.grid(True)
     plt.show()
 
+    #stdev of average temp vs. simulations
+    plt.figure()
+    plt.plot(simulation_range, stdev_temp_change, label="Standard Deviation Temp Change", color="blue", marker='o')
+    
+    # Label the axes
+    plt.xlabel("Number of Simulations")
+    plt.ylabel("Standard Deviation of Temp Change")
+    plt.title("Standard Deviation of Temp Change vs. Number of Simulations")
+    plt.legend()
+    
+    # Show the plot
+    plt.grid(True)
+    plt.show()
 
-# Run and visualize the simulation
-if __name__ == "__main__":
-    #heat_release_vs_uranium()
-    #heat_release_heatmap()
-    heat_release_vs_simulations()
+    #average simulation time vs. num simulations
+    plt.figure()
+    plt.plot(simulation_range, average_time, label="Average Simulation Time", color="blue", marker='o')
+    
+    # Label the axes
+    plt.xlabel("Number of Simulations")
+    plt.ylabel("Average Simulation Time")
+    plt.title("Average Simulation Time vs. Number of Simulations")
+    plt.legend()
+    
+    # Show the plot
+    plt.grid(True)
+    plt.show()
+
+    #stdev of simulation time vs num simulations
+    plt.figure()
+    plt.plot(simulation_range, stdev_avg_time, label="Standard Deviation Simulation Time", color="blue", marker='o')
+    
+    # Label the axes
+    plt.xlabel("Number of Simulations")
+    plt.ylabel("Standard Deviation of Simulation Time")
+    plt.title("Standard Deviation of Simulation Time vs. Number of Simulations")
+    plt.legend()
+    
+    # Show the plot
+    plt.grid(True)
+    plt.show()

@@ -11,6 +11,6 @@ def heatmap():
     from .analysis import heat_release_heatmap
     heat_release_heatmap()
 
-def heat_vs_simulations():
-    from .analysis import heat_release_vs_simulations
-    heat_release_vs_simulations()
+def heattime_vs_simulations():
+    from .analysis import heattime_vs_simulations
+    heattime_vs_simulations()
