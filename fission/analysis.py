@@ -78,19 +78,21 @@ def heattime_vs_simulations():
     dt = 1e-3        
     initial_water_temp = 25.0  # Celsius, assumed room temperature
 
-    simulation_range = (5,10,15,20,25,50,100,200,400,600,800,1000) 
+    simulation_range = (100,200,400,600,800,1000,2000,3000,4000,5000,6000,7000,8000,9000,10000) 
     average_temp_change = []
     stdev_temp_change = [] 
     average_time = []
     stdev_avg_time = []
 
     for simulation in simulation_range:
+        print("CURRENT NUM OF SIMULATIONS:",simulation)
         simulation_num = 1
         sim_temp_change_list = []
         sim_total_time_list = []
 
         while simulation_num <= simulation:
             particles, temp_change,total_time = run_simulation(num_neutrons, num_uraniums, box_dim, dt) 
+            print(total_time)
             sim_temp_change_list.append(temp_change)
             sim_total_time_list.append(total_time)
             simulation_num += 1
