@@ -1,7 +1,7 @@
 
 [project]
 name = "fission"
-version = "1.4.0"
+version = "1.4.8"
 dependencies = [
    "numpy",
    "scipy",

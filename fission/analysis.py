@@ -78,7 +78,7 @@ def heattime_vs_simulations():
     dt = 1e-3        
     initial_water_temp = 25.0  # Celsius, assumed room temperature
 
-    simulation_range = (100,200,400,600,800,1000,2000,3000,4000,5000,6000,7000,8000,9000,10000) 
+    simulation_range = (100,200,300,400,500,600,700,800,900,1000,1500,2000,2500,3000,3500,4000,4500,5000,5500,6000,6500,7000,8000,9000,10000) 
     average_temp_change = []
     stdev_temp_change = [] 
     average_time = []
