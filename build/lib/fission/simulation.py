@@ -1,7 +1,8 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
-from mpl_toolkits.mplot3d import Axes3D
+import timeit
+#import matplotlib.pyplot as plt
+#from matplotlib.animation import FuncAnimation
+#from mpl_toolkits.mplot3d import Axes3D
 from .particle import Neutron, Uranium, Barium, Krypton
 from .reaction import heatRelease, dragEnergy
 
@@ -29,8 +30,9 @@ def total_mass_particles(num_neutrons,num_uranium,num_barium,num_krypton):
 # Function to run the simulation
 def run_simulation(num_neutrons, num_uranium, box_dim, dt):
     # Generate initial particles
+    start_time = timeit.timeit()
     particles = generate_particles(num_neutrons, num_uranium, box_dim)
-    all_positions = []
+    #all_positions = []
 
     # counting the number of each partcile in particles list
     count_neutron = int(0)
@@ -52,7 +54,7 @@ def run_simulation(num_neutrons, num_uranium, box_dim, dt):
     print("Uranium: ", count_uranium)
     print("Barium: ", count_barium)
     print("Krypton: ", count_krypton)
-    print("Total mass: ", total_mass_particles(count_neutron,count_uranium,count_barium,count_krypton))
+    print("Total mass before simulation: ", total_mass_particles(count_neutron,count_uranium,count_barium,count_krypton))
     print()
 
     num_fission_occur = 0
@@ -60,7 +62,7 @@ def run_simulation(num_neutrons, num_uranium, box_dim, dt):
 
     while num_uranium > 0:
 
-        particle_positions = []
+        #particle_positions = []
         # Move and check particle interactions
         for particle in particles:
             particle.move(drag_coeff=0.47, dt=dt)
@@ -71,7 +73,7 @@ def run_simulation(num_neutrons, num_uranium, box_dim, dt):
             total_drag_energy += drag_energy
 
             particle.collideWall([box_dim, box_dim, box_dim])  # Wall collision
-            particle_positions.append(particle.getPos())  # Collect current position 
+            #particle_positions.append(particle.getPos())  # Collect current position 
 
         # Check for particle collisions and fission
         for particle in particles:
@@ -92,10 +94,10 @@ def run_simulation(num_neutrons, num_uranium, box_dim, dt):
                         break
                 else:
                     particle.collideParticle(other_particle)
-                    particle_positions.append(particle.getPos())
+                    #particle_positions.append(particle.getPos())
 
         # Save particle positions for this step
-        all_positions.append(particle_positions)
+        #all_positions.append(particle_positions)
     
         # Drag force heat transfer
         #for particle in particles:
@@ -103,26 +105,37 @@ def run_simulation(num_neutrons, num_uranium, box_dim, dt):
           #  radius = particle.getRadius()
            # drag_energy = dragEnergy(dt, vel, radius)
             #total_drag_energy += drag_energy
-
+    end_time = timeit.timeit()
+    total_time = end_time-start_time
+    print("Total time elapsed: ",total_time)
     temp_change, total_fission_energy = heatRelease(num_fission_occur, box_dim, total_drag_energy)
 
-    return particles, all_positions, temp_change
+    return particles,temp_change
 
 # Run and visualize the simulation
 
+def num_input(prompt):
+        try:
+            num = float(input(prompt))
+        except ValueError:
+            num = num_input("Invalid input, please enter a number: ")
+        return num
+
+
+
 def main():
 #if __name__ == "__main__":
-    num_neutrons = 1
-    num_uranium = 10
+    num_neutrons = int(num_input("Please enter how many neutrons to generate within the box\n>"))
+    num_uranium = int(num_input("Please enter how many uraniums to generate within the box\n>"))
     box_dim = 1.0e-2     # Must be in meter unit
     dt = 1e-3
     initial_water_temp = 25.0 # in Celcius assumed room temperature
 
-    print("initial temp ",initial_water_temp )
-    particles, all_positions, temp_change = run_simulation(num_neutrons, num_uranium, box_dim, dt)
-    print("temp change ", temp_change)
+    print("Initial Temp: ",initial_water_temp )
+    particles, temp_change = run_simulation(num_neutrons, num_uranium, box_dim, dt)
+    print("Temp Change: ", temp_change)
     current_water_temp = temp_change + initial_water_temp   # in Celcius
-    print("current water temperature: ", current_water_temp)
+    print("Current Water Temperature: ", current_water_temp)
             
     # counting the number of each partcile in particles list after finishing the fission reaction
     count_neutron = int(0)
@@ -140,11 +153,11 @@ def main():
         elif name == 'Krypton':
             count_krypton += int(1)
     print("Particles count after fission reaction")
-    print("Neutron: ", count_neutron)
-    print("Uranium: ", count_uranium)
-    print("Barium: ", count_barium)
-    print("Krypton: ", count_krypton)
-    print("Total mass: ", total_mass_particles(count_neutron,count_uranium,count_barium,count_krypton))
+    print("Neutron:", count_neutron)
+    print("Uranium:", count_uranium)
+    print("Barium:", count_barium)
+    print("Krypton:", count_krypton)
+    print("Total mass after simulation: ", total_mass_particles(count_neutron,count_uranium,count_barium,count_krypton))
 
 
 

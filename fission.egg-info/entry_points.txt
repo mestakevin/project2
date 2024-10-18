@@ -1,3 +1,4 @@
 [console_scripts]
 heat_vs_uranium = fission:heat_vs_uranium
+heatmap = fission:heatmap
 main_script = fission:main_program
