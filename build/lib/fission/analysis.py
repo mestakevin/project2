@@ -33,6 +33,65 @@ def heat_release_vs_uranium():
     plt.grid(True)
     plt.show()
 
+def computation_vs_uraniums():
+    # Simulation parameters (common to all runs) 
+    num_neutrons = 4
+    box_dim = 0.5      # Box dimension in meters
+    dt = 1e-3        
+    initial_water_temp = 25.0  # Celsius, assumed room temperature
+    
+    # Range of uranium atoms to simulate
+    uranium_range = (10,25,50,100,250,500,750,1000)  
+    time_list= []  
+
+    for num_uranium in uranium_range:
+        particles,temp_change,total_time = run_simulation(num_neutrons, num_uranium, box_dim, dt) 
+        time_list.append(total_time)
+
+    
+    plt.figure()
+    plt.plot(uranium_range, time_list, label="Simulation Time", color="blue", marker='o')
+    
+    # Label the axes
+    plt.xlabel("Number of Uranium Atoms")
+    plt.ylabel("Simulation Time")
+    plt.title("Simulation Time vs. Number of Uranium Atoms")
+    plt.legend()
+    
+    # Show the plot
+    plt.grid(True)
+    plt.show()
+
+
+def computation_vs_neutrons():
+    # Simulation parameters (common to all runs) 
+    num_uraniums = 2
+    box_dim = 0.5      # Box dimension in meters
+    dt = 1e-3        
+    initial_water_temp = 25.0  # Celsius, assumed room temperature
+    
+    # Range of uranium atoms to simulate
+    neutron_range = (10,25,50,100,250,500,750,1000)  
+    time_list= []  
+
+    for num_neutron in neutron_range:
+        particles,temp_change,total_time = run_simulation(num_neutron, num_uraniums, box_dim, dt) 
+        time_list.append(total_time)
+
+    
+    plt.figure()
+    plt.plot(neutron_range, time_list, label="Simulation Time", color="blue", marker='o')
+    
+    # Label the axes
+    plt.xlabel("Number of Neutron Particles")
+    plt.ylabel("Simulation Time")
+    plt.title("Simulation Time vs. Number of Neutron Particles")
+    plt.legend()
+    
+    # Show the plot
+    plt.grid(True)
+    plt.show()
+
 def heat_release_heatmap():
     # Simulation parameters
     num_neutrons = 4

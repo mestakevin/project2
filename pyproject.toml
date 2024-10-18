@@ -1,7 +1,7 @@
 
 [project]
 name = "fission"
-version = "1.4.8"
+version = "1.4.9"
 dependencies = [
    "numpy",
    "scipy",
@@ -24,3 +24,5 @@ main_script = "fission:main_program"
 heat_vs_uranium = "fission:heat_vs_uranium"
 heatmap = "fission:heatmap"
 heattime = "fission:heattime_vs_simulations"
+uranium_time = "fission:computation_vs_uraniums"
+neutron_time = "fission:computation_vs_neutrons"
