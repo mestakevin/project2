@@ -4,7 +4,7 @@ import numpy as np
 # Method for fission reaction
 def fissionReaction(uranium_pos, Barium, Krypton, Neutron):
     # When a neutron hits Uranium, simulate the fission
-    #print("Fission reaction occurred!")
+    
     # Replace Uranium with fission products and release energy
     # Velocity increase are relative.
     pos = uranium_pos
@@ -38,7 +38,7 @@ def dragEnergy(dt, velocity, radius):
     
     # Add the energy dissipated by this particle to the total drag energy
 
-    return work_done_by_drag
+    return abs(work_done_by_drag)
 
 def heatRelease(num_fission_rxn, box_dim, total_drag_energy):
     # calculating the volume of water tank and its water capacity

@@ -1,4 +1,5 @@
 [console_scripts]
+heat_vs_dt = fission:heattime_vs_timestep
 heat_vs_uranium = fission:heat_vs_uranium
 heatmap = fission:heatmap
 heattime = fission:heattime_vs_simulations

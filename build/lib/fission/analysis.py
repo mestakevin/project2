@@ -7,7 +7,7 @@ from .simulation import run_simulation  # Import the function from Simulation.py
 def heat_release_vs_uranium():
     # Simulation parameters (common to all runs)
     num_neutrons = 4  
-    box_dim = 0.005      # Box dimension in meters
+    box_dim = 0.5      # Box dimension in meters
     dt = 1e-3        
     initial_water_temp = 25.0  # Celsius, assumed room temperature
     
@@ -102,6 +102,8 @@ def computation_vs_neutrons():
     plt.grid(True)
     plt.show()
 
+
+
 def heat_release_heatmap():
     # Simulation parameters
     num_neutrons = 4
@@ -139,6 +141,93 @@ def heat_release_heatmap():
     plt.show()
 
 
+
+
+def heattime_vs_timestep():
+    # Simulation parameters (common to all runs)
+    num_neutrons = 4
+    num_uraniums = 2  
+    box_dim = 0.5      # Box dimension in meters     
+    initial_water_temp = 25.0  # Celsius, assumed room temperature
+
+    dt_range = (0.00001, 0.000025 ,0.00005, 0.000075, 0.00010, 0.00025, 0.00050, 0.00075, 0.00100)
+    average_temp_change = []
+    stdev_temp_change = [] 
+    average_time = []
+    stdev_avg_time = []
+
+    for dt in dt_range:
+        simulation_num = 1
+        sim_temp_change_list = []
+        sim_total_time_list = []
+
+        while simulation_num <= 25:
+            particles, temp_change,total_time = run_simulation(num_neutrons, num_uraniums, box_dim, dt) 
+            sim_temp_change_list.append(temp_change)
+            sim_total_time_list.append(total_time)
+            simulation_num += 1
+    
+        average_temp_change.append(statistics.mean(sim_temp_change_list))
+        stdev_temp_change.append(statistics.stdev(sim_temp_change_list))
+        average_time.append(statistics.mean(sim_total_time_list))
+        stdev_avg_time.append(statistics.stdev(sim_total_time_list))
+
+    
+  
+    plt.figure()
+    plt.plot(dt_range, average_temp_change, label="Average Temp Change", color="blue", marker='o')
+    
+    # Label the axes
+    plt.xlabel("Size of Time Step")
+    plt.ylabel("Average Temp Change")
+    plt.title("Average Temp Change vs. Size of Time Step")
+    plt.legend()
+    
+    # Show the plot
+    plt.grid(True)
+    plt.show()
+
+    plt.figure()
+    plt.plot(dt_range, stdev_temp_change, label="Standard Deviation Temp Change", color="blue", marker='o')
+    
+    # Label the axes
+    plt.xlabel("Size of Time Step")
+    plt.ylabel("Standard Deviation of Temp Change")
+    plt.title("Standard Deviation of Temp Change vs. Size of Time Step")
+    plt.legend()
+    
+    # Show the plot
+    plt.grid(True)
+    plt.show()
+
+    plt.figure()
+    plt.plot(dt_range, average_time, label="Average Simulation Time", color="blue", marker='o')
+    
+    # Label the axes
+    plt.xlabel("Size of Time Step")
+    plt.ylabel("Average Simulation Time")
+    plt.title("Average Simulation Time vs. Size of Time Step")
+    plt.legend()
+    
+    # Show the plot
+    plt.grid(True)
+    plt.show()
+
+    plt.figure()
+    plt.plot(dt_range, stdev_avg_time, label="Standard Deviation Simulation Time", color="blue", marker='o')
+    
+    # Label the axes
+    plt.xlabel("Size of Time Step")
+    plt.ylabel("Standard Deviation of Simulation Time")
+    plt.title("Standard Deviation of Simulation Time vs. Size of Time Step")
+    plt.legend()
+    
+    # Show the plot
+    plt.grid(True)
+    plt.show()
+
+
+
 def heattime_vs_simulations():
     # Simulation parameters (common to all runs)
     num_neutrons = 4
@@ -161,15 +250,14 @@ def heattime_vs_simulations():
 
         while simulation_num <= simulation:
             particles, temp_change,total_time = run_simulation(num_neutrons, num_uraniums, box_dim, dt) 
-            print(total_time)
             sim_temp_change_list.append(temp_change)
             sim_total_time_list.append(total_time)
             simulation_num += 1
     
-        average_temp_change.append(np.average(sim_temp_change_list))
-        stdev_temp_change.append(np.std(sim_temp_change_list))
-        average_time.append(np.average(sim_total_time_list))
-        stdev_avg_time.append(np.std(sim_total_time_list))
+        average_temp_change.append(statistics.mean(sim_temp_change_list))
+        stdev_temp_change.append(statistics.stdev(sim_temp_change_list))
+        average_time.append(statistics.mean(sim_total_time_list))
+        stdev_avg_time.append(statistics.stdev(sim_total_time_list))
 
     
     #average temp vs. simulations

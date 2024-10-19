@@ -22,3 +22,7 @@ def computation_vs_uraniums():
 def computation_vs_neutrons():    
     from .analysis import computation_vs_neutrons
     computation_vs_neutrons()
+
+def heattime_vs_timestep():
+    from .analysis import heattime_vs_timestep
+    heattime_vs_timestep()
