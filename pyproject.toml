@@ -1,10 +1,12 @@
 
 [project]
 name = "fission"
-version = "1.4.9"
+version = "1.5.1"
 dependencies = [
    "numpy",
    "scipy",
+   "math3",
+   "statistics"
 ]
 authors = [
   { name="Kevin Mesta", email="kmmesta@syr.edu" },

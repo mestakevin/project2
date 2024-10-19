@@ -1,12 +1,13 @@
 # Heat release simulation
 import numpy as np
+import statistics
 import matplotlib.pyplot as plt
 from .simulation import run_simulation  # Import the function from Simulation.py
 
 def heat_release_vs_uranium():
     # Simulation parameters (common to all runs)
     num_neutrons = 4  
-    box_dim = 0.5      # Box dimension in meters
+    box_dim = 0.005      # Box dimension in meters
     dt = 1e-3        
     initial_water_temp = 25.0  # Celsius, assumed room temperature
     
@@ -18,6 +19,7 @@ def heat_release_vs_uranium():
         # Run the simulation to get the temperature change
         particles,temp_change,total_time = run_simulation(num_neutrons, num_uranium, box_dim, dt) 
         temp_changes.append(temp_change)
+        print(total_time)
 
     # Plot the heat released as a function of the number of uranium atoms
     plt.figure()
@@ -41,12 +43,16 @@ def computation_vs_uraniums():
     initial_water_temp = 25.0  # Celsius, assumed room temperature
     
     # Range of uranium atoms to simulate
-    uranium_range = (10,25,50,100,250,500,750,1000)  
+    uranium_range = (10,25,50,100,200,250,300,400,500,600,700,750,800,900,1000)  
     time_list= []  
 
     for num_uranium in uranium_range:
-        particles,temp_change,total_time = run_simulation(num_neutrons, num_uranium, box_dim, dt) 
-        time_list.append(total_time)
+        uranium_time_list = []
+        for i in range(0,5):     
+            particles,temp_change,total_time = run_simulation(num_neutrons, num_uranium, box_dim, dt) 
+            uranium_time_list.append(total_time)
+        avg_time = statistics.mean(uranium_time_list)
+        time_list.append(avg_time)
 
     
     plt.figure()
@@ -71,12 +77,16 @@ def computation_vs_neutrons():
     initial_water_temp = 25.0  # Celsius, assumed room temperature
     
     # Range of uranium atoms to simulate
-    neutron_range = (10,25,50,100,250,500,750,1000)  
+    neutron_range = (10,25,50,100,200,250,300,400,500,600,700,750,800,900,1000) 
     time_list= []  
 
     for num_neutron in neutron_range:
-        particles,temp_change,total_time = run_simulation(num_neutron, num_uraniums, box_dim, dt) 
-        time_list.append(total_time)
+        neutron_time_list = []
+        for i in range(0,5):     
+            particles,temp_change,total_time = run_simulation(num_neutron, num_uraniums, box_dim, dt) 
+            neutron_time_list.append(total_time)
+        avg_time = statistics.mean(neutron_time_list)
+        time_list.append(avg_time)
 
     
     plt.figure()
