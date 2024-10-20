@@ -10,7 +10,7 @@ def generate_particles(num_neutrons, num_uranium, box_dim):
     Distributes Neutron and Uranium objects within the dimensions of the box according to an exponential distribution
 
     Parameters:
-        num_nuetrons (int): The number of Neutron objects to disperse within box 
+        num_nuetrons (int): The number of Neutron objects to disperse within box
         num_uranium (int): The number of Uranium objects to disperse wihin box
         box_dim (float): Half of the length of one side of the cubic box the particles will be simulated in
 
@@ -42,7 +42,7 @@ def total_mass_particles(num_neutrons, num_uranium, num_barium, num_krypton):
         num_uranium (int): The number of Uranium objects present in simulation
         num_barium (int): The number of Barium objects present in simulation
         num_krypton (int): The number of Krypton objects present in simulation
-    
+
     Returns:
         int: The total mass of the system in amu
     """
@@ -56,7 +56,7 @@ def total_mass_particles(num_neutrons, num_uranium, num_barium, num_krypton):
 def run_simulation(num_neutrons, num_uranium, box_dim, dt):
     """
     Executes logic that runs entire simulation with particle and wall collisions, fission reactions and determination of mass for one simulation run (until no more Uranium objects remain)
-    
+
     Parameters:
         num_neutrons (int): The number of Neutron objects initially present in simulation
         num_uranium (int): The number of Uranium objects initially present in simulation
@@ -65,7 +65,7 @@ def run_simulation(num_neutrons, num_uranium, box_dim, dt):
 
     Returns:
         list: A list named particles that contains all the Particle objects in no particular order
-        float: The change in temperature within the box 
+        float: The change in temperature within the box
         float: The total time elapsed from particle generation to end of simulation
     """
     # Generate initial particles
@@ -163,7 +163,7 @@ def num_input(prompt):
 def main():
     """
     Executes logic for one simulation, with user inputted initial values and to be executed by 'main_script'
-    
+
     Returns:
         None
     Outputs:

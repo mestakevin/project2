@@ -10,18 +10,19 @@ class Particle:
     A class representing particles in simulation
     Attributes:
         pos (list): The position(in m) of the particle within a cubic box
-        vel (list): The velocity(in m/s^2) of the particle 
-        mass (integer): The mass(in amu) of the particle 
+        vel (list): The velocity(in m/s^2) of the particle
+        mass (integer): The mass(in amu) of the particle
         radius (float): The radius(in m) of the particle
         eng (float): The kinetic energy(in J) of the particle
     """
+
     def __init__(self, pos, vel):
         """
         Initializes a Particle object
 
         Parameters:
             pos (list): The position(in m) of the particle within a cubic box
-            vel (list): The velocity(in m/s^2) of the particle 
+            vel (list): The velocity(in m/s^2) of the particle
         """
         self.pos = pos
         self.vel = vel
@@ -151,7 +152,7 @@ class Particle:
             other_particle (Particle): Particle object whose distance from self is being checked
 
         Returns:
-            float: Distance between two Particle objects 
+            float: Distance between two Particle objects
         """
         pos1 = self.getPos()
 
@@ -245,7 +246,7 @@ class Particle:
         Returns:
             None
         Outputs:
-            Both Particle objects' vel attributes are updated in order to conserve momentum in a way to avoid 
+            Both Particle objects' vel attributes are updated in order to conserve momentum in a way to avoid
             erros in vel updating
         """
         # Convert positions to NumPy arrays to perform vector operations
@@ -359,18 +360,19 @@ class Neutron(Particle):
 
     Attributes:
         pos (list): The position(in m) of the particle within a cubic box
-        vel (list): The velocity(in m/s^2) of the particle 
-        mass (integer): The mass(in amu) of the particle 
+        vel (list): The velocity(in m/s^2) of the particle
+        mass (integer): The mass(in amu) of the particle
         radius (float): The radius(in m) of the particle
         eng (float): The kinetic energy(in J) of the particle
     """
+
     def __init__(self, pos, vel):
         """
-        Initializes a Neutron object 
+        Initializes a Neutron object
 
         Parameters:
             pos (list): The position(in m) of the particle within a cubic box
-            vel (list): The velocity(in m/s^2) of the particle 
+            vel (list): The velocity(in m/s^2) of the particle
         """
         super().__init__(pos, vel)
         self.mass = 1  # kilograms
@@ -383,18 +385,19 @@ class Uranium(Particle):
 
     Attributes:
         pos (list): The position(in m) of the particle within a cubic box
-        vel (list): The velocity(in m/s^2) of the particle 
-        mass (integer): The mass(in amu) of the particle 
+        vel (list): The velocity(in m/s^2) of the particle
+        mass (integer): The mass(in amu) of the particle
         radius (float): The radius(in m) of the particle
         eng (float): The kinetic energy(in J) of the particle
     """
+
     def __init__(self, pos, vel):
         """
-        Initializes a Uranium object 
+        Initializes a Uranium object
 
         Parameters:
             pos (list): The position(in m) of the particle within a cubic box
-            vel (list): The velocity(in m/s^2) of the particle 
+            vel (list): The velocity(in m/s^2) of the particle
         """
         super().__init__(pos, vel)
         self.mass = 235  # kilograms
@@ -407,18 +410,19 @@ class Barium(Particle):
 
     Attributes:
         pos (list): The position(in m) of the particle within a cubic box
-        vel (list): The velocity(in m/s^2) of the particle 
-        mass (integer): The mass(in amu) of the particle 
+        vel (list): The velocity(in m/s^2) of the particle
+        mass (integer): The mass(in amu) of the particle
         radius (float): The radius(in m) of the particle
         eng (float): The kinetic energy(in J) of the particle
     """
+
     def __init__(self, pos, vel):
         """
-        Initializes a Barium object 
+        Initializes a Barium object
 
         Parameters:
             pos (list): The position(in m) of the particle within a cubic box
-            vel (list): The velocity(in m/s^2) of the particle 
+            vel (list): The velocity(in m/s^2) of the particle
         """
         super().__init__(pos, vel)
         self.mass = 141  # 2.3396e-25 #kilograms
@@ -431,18 +435,19 @@ class Krypton(Particle):
 
     Attributes:
         pos (list): The position(in m) of the particle within a cubic box
-        vel (list): The velocity(in m/s^2) of the particle 
-        mass (integer): The mass(in amu) of the particle 
+        vel (list): The velocity(in m/s^2) of the particle
+        mass (integer): The mass(in amu) of the particle
         radius (float): The radius(in m) of the particle
         eng (float): The kinetic energy(in J) of the particle
     """
+
     def __init__(self, pos, vel):
         """
-        Initializes a Krypton object 
+        Initializes a Krypton object
 
         Parameters:
             pos (list): The position(in m) of the particle within a cubic box
-            vel (list): The velocity(in m/s^2) of the particle 
+            vel (list): The velocity(in m/s^2) of the particle
         """
         super().__init__(pos, vel)
         self.mass = 92  # 1.52579e-27 #kilograms

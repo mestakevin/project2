@@ -6,6 +6,14 @@ from .simulation import run_simulation  # Import the function from Simulation.py
 
 
 def heat_release_vs_uranium():
+    """
+    Generates plot of temperature change vs. number of uranium atoms for a set number of Neutron objects, box size and time step
+
+    Returns:
+        None
+    Outputs:
+        Displays graph of temperature change vs. number of uranium atoms
+    """
     # Simulation parameters (common to all runs)
     num_neutrons = 4
     box_dim = 0.5  # Box dimension in meters
@@ -42,6 +50,14 @@ def heat_release_vs_uranium():
 
 
 def computation_vs_uraniums():
+    """
+    Generates plot of computation time vs. number of uranium atoms for a set number of Neutron objects, box size and time step
+
+    Returns:
+        None
+    Outputs:
+        Displays graph of computation time vs. number of uranium atoms
+    """
     # Simulation parameters (common to all runs)
     num_neutrons = 4
     box_dim = 0.5  # Box dimension in meters
@@ -95,6 +111,14 @@ def computation_vs_uraniums():
 
 
 def computation_vs_neutrons():
+    """
+    Generates plot of computation time vs. number of neutron particles for a set number of Uranium objects, box size and time step
+
+    Returns:
+        None
+    Outputs:
+        Displays graph of computation time vs. number of neutron particles
+    """
     # Simulation parameters (common to all runs)
     num_uraniums = 2
     box_dim = 0.5  # Box dimension in meters
@@ -148,6 +172,14 @@ def computation_vs_neutrons():
 
 
 def heat_release_heatmap():
+    """
+    Creates a heatmap showing the temperature change vs. number of uranium atoms for set box size, time step and number of Neutron objects
+
+    Returns:
+        None
+    Outputs:
+        Displays heat map of temperature change vs. number of uranium atoms
+    """
     # Simulation parameters
     num_neutrons = 4
     dt = 1e-3
@@ -217,6 +249,14 @@ def heat_release_heatmap():
 
 
 def heattime_vs_timestep():
+    """ "
+    Creates graph of average temperature change, standard deviation of temperature change, average simulation time and standard deviation of simulation time all vs different time steps
+
+    Returns:
+        None
+    Outputs:
+        Displays 4 graphs of average temperature change, standard deviation of temperature change, average simulation time and standard deviation of simulation time all against different time steps and with set inital conditions
+    """
     # Simulation parameters (common to all runs)
     num_neutrons = 4
     num_uraniums = 2
@@ -335,6 +375,14 @@ def heattime_vs_timestep():
 
 
 def heattime_vs_simulations():
+    """ "
+    Creates graph of average of average temperature change, standard deviation of average of temperature change, average of standard deviation of temperature change and standard deviation of standard deviation of temperature change all vs different size simulation batches
+
+    Returns:
+        None
+    Outputs:
+        Displays 4 graphs of average of average temperature change, standard deviation of average of temperature change, average of standard deviation of temperature change and standard deviation of standard deviation of temperature change all vs different size simulation batches and with set inital conditions
+    """
     # Simulation parameters (common to all runs)
     num_neutrons = 4
     num_uraniums = 2
