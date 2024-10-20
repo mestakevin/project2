@@ -6,6 +6,17 @@ from .reaction import heatRelease, dragEnergy
 
 # Function to generate initial particles
 def generate_particles(num_neutrons, num_uranium, box_dim):
+    """
+    Distributes Neutron and Uranium objects within the dimensions of the box according to an exponential distribution
+
+    Parameters:
+        num_nuetrons (int): The number of Neutron objects to disperse within box 
+        num_uranium (int): The number of Uranium objects to disperse wihin box
+        box_dim (float): Half of the length of one side of the cubic box the particles will be simulated in
+
+    Returns:
+        list: A list containing the Nuetron and Uranium objects generated
+    """
     particles = []
 
     # Generate neutrons with high random velocities
@@ -23,6 +34,18 @@ def generate_particles(num_neutrons, num_uranium, box_dim):
 
 
 def total_mass_particles(num_neutrons, num_uranium, num_barium, num_krypton):
+    """
+    Calculates the total mass of the system in amu
+
+    Parameters:
+        num_neutrons (int): The number of Neutron objects present in simulation
+        num_uranium (int): The number of Uranium objects present in simulation
+        num_barium (int): The number of Barium objects present in simulation
+        num_krypton (int): The number of Krypton objects present in simulation
+    
+    Returns:
+        int: The total mass of the system in amu
+    """
     total_mass = (
         num_neutrons * 1 + num_uranium * 235 + num_barium * 141 + num_krypton * 92
     )
@@ -31,6 +54,20 @@ def total_mass_particles(num_neutrons, num_uranium, num_barium, num_krypton):
 
 # Function to run the simulation
 def run_simulation(num_neutrons, num_uranium, box_dim, dt):
+    """
+    Executes logic that runs entire simulation with particle and wall collisions, fission reactions and determination of mass for one simulation run (until no more Uranium objects remain)
+    
+    Parameters:
+        num_neutrons (int): The number of Neutron objects initially present in simulation
+        num_uranium (int): The number of Uranium objects initially present in simulation
+        box_dim (float): Half of the length of one side of the cubic box the particles will be simulated in
+        dt (float): The size of time step for updating particle's position and velocities
+
+    Returns:
+        list: A list named particles that contains all the Particle objects in no particular order
+        float: The change in temperature within the box 
+        float: The total time elapsed from particle generation to end of simulation
+    """
     # Generate initial particles
     start_time = time.time()
     particles = generate_particles(num_neutrons, num_uranium, box_dim)
@@ -107,10 +144,15 @@ def run_simulation(num_neutrons, num_uranium, box_dim, dt):
     return particles, temp_change, total_time
 
 
-# Run and visualize the simulation
-
-
 def num_input(prompt):
+    """
+    Obtains a number from the user to be used for simulating
+
+    Parameters:
+        prompt (str): Message to be displayed to prompt user to input a number
+    Returns:
+        float: User inputted number
+    """
     try:
         num = float(input(prompt))
     except ValueError:
@@ -119,6 +161,14 @@ def num_input(prompt):
 
 
 def main():
+    """
+    Executes logic for one simulation, with user inputted initial values and to be executed by 'main_script'
+    
+    Returns:
+        None
+    Outputs:
+        Displays intial and final mass, the temperature change of the water within the box, and the total time elapsed
+    """
     num_neutrons = int(
         num_input("Please enter how many neutrons to generate within the box\n>")
     )
