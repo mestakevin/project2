@@ -1,4 +1,35 @@
-READ ME FILE FOR PROJECT 2
-Sara and Kevin
+Fission Module README
 
-Add text here
+Thank you for downloading and installing the "fission" package, please make sure that you also have the appropriate "pyproject.toml" file for version 2.0.1 before continuing below. 
+
+
+The main focus of this package is to perform a Monte Carlo simulation of neutron particles and uranium, barium, and krypton atoms traveling within a sealed water tank as fission reactions of uranium occur. The trajectories of each of these particles was simulated according to a 2nd order ODE, due to the drag created from traveling through water, and probabilistic collisions occurred between all particles in the simulation. The simulation is initialized with a set number of neutrons and uranium atoms according to an exponential random distribution, a set time step to increment the particles through time, and the dimensions of the cubic container the simulation is run in. The simulation then runs until there are no more remaining uranium atoms and the change in water temperature and total time elapsed is displayed to the user. 
+
+The package can be installed by typing the following in the command line: "pip(3) install fission" which downloads all the corresponding modules necessary for the fission module to run properly.
+
+Following installation, the following scripts can be ran from command line:
+
+main_script
+heat_vs_uranium
+heattmap
+heattime
+uranium_time
+neutron_time
+heat_vs_dt
+
+"main_script" performs the fission simulation according to user inputted parameters and returns the temperature change of water and the total time in seconds of the simulation. A sample input for this script looks like this:
+
+##########################################################################################
+Please enter how many neutrons to generate within the box
+>2
+Please enter how many uraniums to generate within the box
+>4
+Please enter a value for half the length of the box
+>0.5
+Please enter the time step for the simulation
+>0.001
+##########################################################################################
+
+The values for neutrons and uranium atoms must be positive integers while the values for length and time step can be positive floats or integers (larger lengths may not result in measurable temperature changes and larger time steps may not cause collisions).
+
+"heat_vs_uranium"
