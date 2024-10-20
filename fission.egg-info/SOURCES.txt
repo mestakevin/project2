@@ -5,7 +5,6 @@ fission/analysis.py
 fission/particle.py
 fission/reaction.py
 fission/simulation.py
-fission/test_module.py
 fission.egg-info/PKG-INFO
 fission.egg-info/SOURCES.txt
 fission.egg-info/dependency_links.txt

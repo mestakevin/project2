@@ -236,38 +236,50 @@ def heattime_vs_simulations():
     dt = 1e-3        
     initial_water_temp = 25.0  # Celsius, assumed room temperature
 
-    simulation_range = (100,200,300,400,500,600,700,800,900,1000,1500,2000,2500,3000,3500,4000,4500,5000,5500,6000,6500,7000,8000,9000,10000) 
-    average_temp_change = []
-    stdev_temp_change = [] 
-    average_time = []
-    stdev_avg_time = []
+    simulation_range = (10,25,50,75,100,200,300,400,500) 
+    
+    avg_sim_avg_temp_list = []
+    avg_sim_stdev_temp_list = []
+    stdev_sim_avg_temp_list = []
+    stdev_sim_stdev_temp_list = []
 
     for simulation in simulation_range:
         print("CURRENT NUM OF SIMULATIONS:",simulation)
-        simulation_num = 1
-        sim_temp_change_list = []
-        sim_total_time_list = []
-
-        while simulation_num <= simulation:
-            particles, temp_change,total_time = run_simulation(num_neutrons, num_uraniums, box_dim, dt) 
-            sim_temp_change_list.append(temp_change)
-            sim_total_time_list.append(total_time)
-            simulation_num += 1
+        sim_average_temp_change = []
+        sim_stdev_temp_change = []
+        
+        for i in range(0,100):
+            simulation_num = 1
+            temp_change_list = []
+            
+            
+            while simulation_num <= simulation:
+                particles, temp_change,total_time = run_simulation(num_neutrons, num_uraniums, box_dim, dt) 
+                temp_change_list.append(temp_change)
+                simulation_num += 1
     
-        average_temp_change.append(statistics.mean(sim_temp_change_list))
-        stdev_temp_change.append(statistics.stdev(sim_temp_change_list))
-        average_time.append(statistics.mean(sim_total_time_list))
-        stdev_avg_time.append(statistics.stdev(sim_total_time_list))
+            sim_average_temp_change.append(statistics.mean(temp_change_list))
+            sim_stdev_temp_change.append(statistics.stdev(temp_change_list))
+
+        avg_sim_avg_temp_change = statistics.mean(sim_average_temp_change)
+        avg_sim_stdev_temp_change = statistics.mean(sim_stdev_temp_change)
+        stdev_sim_avg_temp_change = statistics.stdev(sim_average_temp_change)
+        stdev_sim_stdev_temp_change = statistics.stdev(sim_stdev_temp_change)
+    
+        avg_sim_avg_temp_list.append(avg_sim_avg_temp_change)
+        avg_sim_stdev_temp_list.append(avg_sim_stdev_temp_change)
+        stdev_sim_avg_temp_list.append(stdev_sim_avg_temp_change)
+        stdev_sim_stdev_temp_list.append(stdev_sim_stdev_temp_change)
 
     
-    #average temp vs. simulations
+    #average of average temp vs. simulations
     plt.figure()
-    plt.plot(simulation_range, average_temp_change, label="Average Temp Change", color="blue", marker='o')
+    plt.plot(simulation_range, avg_sim_avg_temp_list, label="Avg. of Avg. Temp Change", color="blue", marker='o')
     
     # Label the axes
     plt.xlabel("Number of Simulations")
-    plt.ylabel("Average Temp Change")
-    plt.title("Average Temp Change vs. Number of Simulations")
+    plt.ylabel("Avg. of Avg. Temp Change")
+    plt.title("Avg. of Avg. Temp Change vs. Number of Simulations")
     plt.legend()
     
     # Show the plot
@@ -276,42 +288,44 @@ def heattime_vs_simulations():
 
     #stdev of average temp vs. simulations
     plt.figure()
-    plt.plot(simulation_range, stdev_temp_change, label="Standard Deviation Temp Change", color="blue", marker='o')
+    plt.plot(simulation_range, stdev_sim_avg_temp_list, label="St.Dev. of Avg. Temp Change", color="blue", marker='o')
     
     # Label the axes
     plt.xlabel("Number of Simulations")
-    plt.ylabel("Standard Deviation of Temp Change")
-    plt.title("Standard Deviation of Temp Change vs. Number of Simulations")
+    plt.ylabel("St.Dev. of Avg. Temp Change")
+    plt.title("St.Dev. of Avg. Temp Change vs. Number of Simulations")
     plt.legend()
     
     # Show the plot
     plt.grid(True)
     plt.show()
 
-    #average simulation time vs. num simulations
+    #average of stdev of temp vs. simulations
     plt.figure()
-    plt.plot(simulation_range, average_time, label="Average Simulation Time", color="blue", marker='o')
+    plt.plot(simulation_range, avg_sim_stdev_temp_list, label="Avg. St.Dev. of Temp Change", color="blue", marker='o')
     
     # Label the axes
     plt.xlabel("Number of Simulations")
-    plt.ylabel("Average Simulation Time")
-    plt.title("Average Simulation Time vs. Number of Simulations")
+    plt.ylabel("Avg. St.Dev. of Temp Change")
+    plt.title("Avg. St.Dev. of Temp Change vs. Number of Simulations")
     plt.legend()
     
     # Show the plot
     plt.grid(True)
     plt.show()
 
-    #stdev of simulation time vs num simulations
+    #stdev of stdev temp vs. simulations
     plt.figure()
-    plt.plot(simulation_range, stdev_avg_time, label="Standard Deviation Simulation Time", color="blue", marker='o')
+    plt.plot(simulation_range, stdev_sim_stdev_temp_list, label="St.Dev. of St.Dev. of Temp Change", color="blue", marker='o')
     
     # Label the axes
     plt.xlabel("Number of Simulations")
-    plt.ylabel("Standard Deviation of Simulation Time")
-    plt.title("Standard Deviation of Simulation Time vs. Number of Simulations")
+    plt.ylabel("St.Dev. of St.Dev. of Temp Change")
+    plt.title("St.Dev. of St.Dev. of Temp Change vs. Number of Simulations")
     plt.legend()
     
     # Show the plot
     plt.grid(True)
     plt.show()
+
+    

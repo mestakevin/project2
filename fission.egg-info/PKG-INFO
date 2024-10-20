@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: fission
-Version: 1.5.4
+Version: 1.5.9
 Summary: Nuclear fission reaction package
 Author-email: Kevin Mesta <kmmesta@syr.edu>, Sara Talebi <stalebi@syr.edu>
 Classifier: Programming Language :: Python :: 3

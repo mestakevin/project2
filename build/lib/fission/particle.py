@@ -118,8 +118,8 @@ class Particle:
         mass_1 = self.mass
         mass_2 = other_particle.mass
 
-        initial_momentum = vel_1 * mass_1 + vel_2 * mass_2
-        print("INITAL",initial_momentum)
+        #initial_momentum = vel_1 * mass_1 + vel_2 * mass_2
+        #print("INITAL",initial_momentum)
 
         # Compute new velocities after elastic collision
         if np.linalg.norm(pos_1 - pos_2) >= 1e-6:  # Avoid division by zero or extremely small value
@@ -130,22 +130,14 @@ class Particle:
             self.updVel(new_vel_1.tolist()) 
             other_particle.updVel(new_vel_2.tolist())
 
-            final_momentum = new_vel_1 * mass_1 + new_vel_2 * mass_2
-            print("FINAL",final_momentum)
+            #final_momentum = new_vel_1 * mass_1 + new_vel_2 * mass_2
+            #print("FINAL",final_momentum)
         else:
-            new_vel_1 = vel_1 - ((2 * mass_2 / (mass_1 + mass_2)) * (np.dot(vel_1 - vel_2, pos_1 - pos_2) / np.linalg.norm(pos_1 - pos_2) ** 2) * (pos_1 - pos_2))
-            new_vel_2 = vel_2 - ((2 * mass_1 / (mass_1 + mass_2)) * (np.dot(vel_2 - vel_1, pos_2 - pos_1) / np.linalg.norm(pos_2 - pos_1) ** 2) * (pos_2 - pos_1))
-
-            # Update the velocities
-            self.updVel(new_vel_1.tolist()) 
-            other_particle.updVel(new_vel_2.tolist())
-
-            final_momentum = new_vel_1 * mass_1 + new_vel_2 * mass_2
-            print("FINAL",final_momentum)
-
+            
             # Swap velocities
-            #self.updVel(vel_2)
-            #other_particle.updVel(vel_1)
+            self.updVel(vel_2)
+            other_particle.updVel(vel_1)
+           
             #print("second case")
             #final_momentum = vel_2 * mass_1 + vel_1 * mass_2
             #print("FINAL",final_momentum)
