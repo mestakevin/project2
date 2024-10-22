@@ -5,7 +5,7 @@ Thank you for downloading and installing the "fission" package, please make sure
 
 The main focus of this package is to perform a Monte Carlo simulation of neutron particles and uranium, barium, and krypton atoms traveling within a sealed water tank as fission reactions of uranium occur. The trajectories of each of these particles was simulated according to a 2nd order ODE, due to the drag created from traveling through water, and probabilistic collisions occurred between all particles in the simulation. The simulation is initialized with a set number of neutrons and uranium atoms according to an exponential random distribution, a set time step to increment the particles through time, and the dimensions of the cubic container the simulation is run in. The simulation then runs until there are no more remaining uranium atoms and the change in water temperature and total time elapsed is displayed to the user. 
 
-The package can be installed by typing the following in the command line: "pip(3) install fission" which downloads all the corresponding modules necessary for the fission module to run properly.
+The package can be installed by typing the following in the command line: "pip(3) install fission" which downloads all the corresponding modules necessary for the fission module to run properly. In addition please be sure to have pip version 24.2 installed in your virtual environment prior to installation of fission.
 
 Following installation, the following scripts can be ran from command line:
 
